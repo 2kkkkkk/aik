@@ -1,0 +1,99 @@
+---
+- name: 允许Node加入集群
+  ignore_errors: yes
+  shell: kubectl certificate approve $(kubectl get csr |awk 'NR!=1{print $1}')
+
+###### addon Option I
+- name: "获取etcd-ca证书"
+  slurp:
+    src: "{{ etcd_work_dir }}/ssl/ca.pem"
+  register: cni_etcd_ca
+  when: addons_Option_I 
+
+- name: "获取etcd-client证书"
+  slurp:
+    src: "{{ etcd_work_dir }}/ssl/server.pem"
+  register: cni_etcd_cert
+  when: addons_Option_I 
+
+- name: "获取etcd-client证书"
+  slurp:
+    src: "{{ etcd_work_dir }}/ssl/server-key.pem"
+  register: cni_etcd_key
+  when: addons_Option_I 
+
+
+- import_tasks: calico.yml
+  when:
+    - network_plugin == 'calico' and addons_Option_I
+  tags:
+    - calico
+
+- import_tasks: flannel.yml
+  when:
+    - network_plugin == 'flannel' and addons_Option_I
+  tags:
+    - flannel
+
+- import_tasks: cilium.yml
+  when:
+    - network_plugin == 'cilium' and addons_Option_I
+  tags:
+    - ciliums
+
+- import_tasks: coredns.yml
+  tags:
+    - coredns
+  when: addons_Option_I
+
+- import_tasks: metrics-server.yml
+  tags:
+    - metrics-server
+  when: addons_Option_I
+
+
+
+###### addon Option II
+
+- name: 拷贝YAML文件到Master
+  copy: src={{ item }} dest={{ tmp_dir }}
+  with_fileglob:
+    - "*.yaml"
+  when: addons_Option_II
+
+- name: 部署Flannel,Dashboard,CoreDNS,Ingress
+  ignore_errors: yes
+  shell: |
+         cd {{ tmp_dir }}
+         for yaml in $(ls *.yaml);do kubectl apply -f $yaml;done
+  when: addons_Option_II
+
+
+- name: 查看Pod状态
+  shell: kubectl get all --all-namespaces
+  register: getall
+- debug: var=getall.stdout_lines
+
+- name: 创建Dashboard管理员令牌
+  ignore_errors: yes 
+  delegate_to: "{{ groups['master'][0] }}"
+  run_once: true
+  shell: |
+         kubectl create serviceaccount dashboard-admin -n kubernetes-dashboard
+         kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin
+  when: addons_Option_II  
+
+- name: 获取Dashboard管理员令牌
+  ignore_errors: yes
+  shell: |
+         web='https://NodeIP:30001'
+         token=$(kubectl describe secrets -n kubernetes-dashboard \
+         $(kubectl get secret -n kubernetes-dashboard | awk '/dashboard-admin/{print $1}') |awk '/^token/{print $2}')
+         echo "访问地址--->$web"
+         echo "令牌内容--->$token" 
+  register: ui
+  when: addons_Option_II
+
+- name: Kubernetes Dashboard登录信息
+  debug: var=ui.stdout_lines
+  when: addons_Option_II

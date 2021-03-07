@@ -1,0 +1,86 @@
+---
+
+#离线安装nginx HA
+
+- name: 创建临时目录
+  file: dest={{ tmp_dir }} state=directory
+  when: Offline_installation
+
+- name: 拷贝nginx,keepalived安装包
+  unarchive: src={{ software_dir }}/ha.tar.gz dest={{ tmp_dir }}
+  when: Offline_installation
+
+- name: 安装keepalived高可用软件
+  yum: name={{ tmp_dir }}/{{ item }} state=present
+  with_items:
+    - "net-snmp-libs-5.7.2-43.el7.x86_64.rpm"
+    - "net-snmp-agent-libs-5.7.2-43.el7.x86_64.rpm"
+    - "keepalived-1.3.5-16.el7.x86_64.rpm"
+  when: Offline_installation
+
+- name: 安装nginx负载均衡器
+  yum: name={{ tmp_dir }}/nginx-1.16.1-1.el7.ngx.x86_64.rpm state=present
+  when: Offline_installation
+
+- name: 拷贝nginx配置文件
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  when: Offline_installation
+
+
+- name: 拷贝keepalived配置文件       
+  template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
+  when: Offline_installation
+
+
+- name: 拷贝nginx健康检查脚本
+  copy: src=check_nginx.sh dest=/etc/keepalived/ mode=u+x
+  when: Offline_installation
+
+
+- name: 启动服务
+  systemd: name={{ item }} state=restarted enabled=yes daemon_reload=yes
+  with_items:
+    - nginx
+    - keepalived
+  when: Offline_installation
+
+
+# yum在线安装nginx HA
+
+- name: "yum安装nginx"
+  yum:
+    name: nginx
+    state: present
+  when: Online_installation  and have_network
+
+- name: "拷贝nginx.conf" 
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/nginx.conf"
+  notify:
+    - restart nginx
+  when:  Online_installation  and have_network
+
+
+- name: "yum安装keepalived"
+  yum:
+    name: keepalived
+    state: present
+- name: "拷贝keepalived.conf文件"
+  template:
+    src: "keepalived.conf.j2"
+    dest: "/etc/keepalived/keepalived.conf"
+  notify:
+    - restart keepalived
+  when: Online_installation  and have_network
+
+
+
+- name: "拷贝check_nginx.sh"
+  template:
+    src: "check_nginx.sh"
+    dest: "/etc/keepalived/check_nginx.sh"
+    mode: 0777
+  notify:
+    - restart keepalived
+  when: Online_installation  and have_network
