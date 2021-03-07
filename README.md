@@ -35,6 +35,10 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 
 ```
 # vi hosts
+
+
+# 测试
+ansible -i hosts all  -m shell -a "date" -uroot -k
 ...
 ```
 修改group_vars/all.yml文件，修改软件包目录和证书可信任IP。
