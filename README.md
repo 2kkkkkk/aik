@@ -13,8 +13,8 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 下载Ansible部署文件：
 
 ```
-# git clone 
-# cd 
+# git clone https://gitee.com/Zheng--Kai/aik.git
+# cd aik
 
 ```
 
@@ -57,11 +57,11 @@ cert_hosts:
 
 单Master版：
 ```
-# ansible-playbook -i hosts single-master-deploy.yml -uroot -k
+# ansible-playbook -i hosts single-master-docker.yml -uroot -k
 ```
 多Master版：
 ```
-# ansible-playbook -i hosts multi-master-deploy.yml -uroot -k
+# ansible-playbook -i hosts multi-master-docker.yml -uroot -k
 ```
 
 ## 5、部署控制
@@ -69,7 +69,7 @@ cert_hosts:
 
 例如：只运行部署插件
 ```
-# ansible-playbook -i hosts single-master-deploy.yml -uroot -k --tags addons
+# ansible-playbook -i hosts single-master-docker.yml -uroot -k --tags addons
 ```
 
 ## 6、节点扩容
