@@ -39,5 +39,3 @@ TASK [addons : 创建Dashboard管理员令牌
 
 后续优化
 nginx ha yum安装 配置文件报错 第13行
-
-
