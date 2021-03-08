@@ -1,0 +1,40 @@
+这里用于记录 更新日志和完成情况
+自动化安装 master 已完成      2021-3-1
+自动化安装 docker 已完成      2021-3-2
+自动化安装 node   已完成      2021-3-3
+自动化安装 etcd   已完成      2021-3-4
+自动化安装 addons 已完成      2021-3-6
+添加 网络方案选择模块 分为方案1 和方案2 已完成  问题遗留:方案2 yaml文件有问题 但可用 待优化   2021-3-7
+自动化安装 nginx ha  已完成  离线已完成  在线yum 报错     2021-3-5
+自动化安装 containerd  未完成
+自动化 critools  未完成
+自动化安装 haproxy ha 未完成
+
+
+
+修复bug：
+1、修复master模块报错      2021-3-6
+报错内容：多次执行
+master : 授权APIServer kubelet bootstrap] **************************************************************************************
+fatal: [192.168.72.130]: FAILED! => {"changed": true, "cmd": "sleep 3 && kubectl apply -f /tmp/k8s/apiserver-to-kubelet-rbac.yaml && kubectl app2021-03-07 00:56:43.872187", "msg": "non-zero return code", "rc": 1, "start": "2021-03-07 00:56:40.390590", "stderr": "Error from server (Alreaderrolebindings.rbac.authorization.k8s.io \"system:kube-apiserver\" already exists", "stderr_lines": ["Error from server (AlreadyExists): error wac.authorization.k8s.io \"system:kube-apiserver\" already exists"], "stdout": "clusterrole.rbac.authorization.k8s.io/system:kube-apiserver-to-ku:kube-apiserver-to-kubelet unchanged"]}
+解决方法：实现只输出一次  已实现
+
+2、插件报错Dashboard     2021-3-6
+报错内容多次执行
+TASK [addons : 创建Dashboard管理员令牌
+实现只输出一次 已实现
+
+
+
+需求
+添加补齐命令 已添加
+添加离线加载镜像模块 yes代表载入 no 代表从网络拉取 不载入  已添加
+待完成
+添加kubernetes新版本所推荐的容器引擎 containerd
+
+
+
+后续优化
+自定义选择高可用工具
+自动打污点
+自动打标签
