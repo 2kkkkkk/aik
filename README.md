@@ -4,6 +4,41 @@
 ### 1、找一台服务器安装Ansible
 ```
 # 需要安装python3 用pip3安装ansible
+#python3安装
+1.依赖包安装
+yum -y  install gcc-c++
+yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel
+2.下载包：
+#下载路径(里面有不同的版本)https://www.python.org/ftp/python/3.8.8/
+#下载命令
+wget https://www.python.org/ftp/python/3.8.8/Python-3.8.8.tar.xz
+3.解压：
+tar -zxvf Python-3.8.8.tar.xz
+4.安装：
+cd Python-3.8.8
+#指定编译目录
+mkdir /usr/local/python3
+./configure --prefix=/usr/local/python3 --with-ssl
+#编译安装
+make && make install
+5.建立软连接
+ln -s /usr/local/python3/bin/python3.8 /usr/bin/python3
+ln -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3  没有pip直接就pip
+6.测试一下python3是否可以用
+python3
+pip3
+安装ansible
+pip install ansible -i https://mirrors.aliyun.com/pypi/simple/
+#ansible需要sshpass
+yum -y install sshpass
+#ansible配置文件
+https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg
+#ansible需要sshpass
+yum -y install sshpass
+#软链接ansible-playbook
+ln -s /usr/local/python3/bin/ansible-playbook  /usr/bin/ansible-playbook
+#软链接
+ln -s /usr/local/python3/bin/ansible  /usr/bin/ansible
 # 安装netaddr模块
 pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 
@@ -35,14 +70,25 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 
 ```
 # vi hosts
-
+[master]
+172.16.163.111 node_name=k8s-master1 hostname=k8s-master1
+[node]
+172.16.163.114 node_name=k8s-node1 hostname=k8s-node1
+[etcd]
+172.16.163.111 etcd_name=etcd-1 hostname=k8s-master1
+[lb]
+# 如果部署单Master，该项忽略
+172.16.163.111 lb_name=lb-master hostname=k8s-master1
+#用于添加节点
+[newnode]
+#172.16.163.106 node_name=k8s-node3
 
 # 测试
 ansible -i hosts all  -m shell -a "date" -uroot -k
 ...
 ```
 修改group_vars/all.yml文件，修改软件包目录和证书可信任IP。
-
+每段参数都有备注，注意ip是对的 网络保持一致
 ```
 # vim group_vars/all.yml
 software_dir: '/root/binary_pkg'
@@ -79,7 +125,7 @@ cert_hosts:
 ## 6、节点扩容
 1）修改hosts，添加新节点ip
 ```
-# vi hosts
+# vim hosts
 ```
 2）执行部署
 ```
