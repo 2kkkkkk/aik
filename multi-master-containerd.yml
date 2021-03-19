@@ -13,53 +13,49 @@
     - tls
   tags: tls
 
-- name: 2.1部署containerd
+- name: 2.部署containerd
   gather_facts: false
   hosts: k8s
   roles: 
     - containerd
   tags: containerd 
 
-- name: 2.1.部署containerd
+- name: 3.部署critools
   gather_facts: false
   hosts: k8s
   roles:
     - critools
   tags: critools
 
-
-
-- name: 3.部署ETCD集群
+- name: 4.部署ETCD集群
   gather_facts: false
   hosts: etcd
   roles:
     -  etcd
   tags: etcd
 
-- name: 4.部署K8S Master
+- name: 5.部署K8S Master
   gather_facts: false
   hosts: master
   roles:
     - master
   tags: master
 
-
-- name : 5.1 部署haproxy
+- name: 6. 部署Nginx负载均衡并高可用
+  gather_facts: false
   hosts: lb
   roles:
-    - haproxy
-    - keepalived
-  tags: haproxylb
+    - nginx
+  tags: nginx
 
-
-- name: 6.部署K8S Node
+- name: 7.部署K8S Node
   gather_facts: false
   hosts: k8s 
   roles:
     - node
   tags: node
 
-- name: 7.部署插件
+- name: 8.部署插件
   gather_facts: false
   hosts: master
   roles:
