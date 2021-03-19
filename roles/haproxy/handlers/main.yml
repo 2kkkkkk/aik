@@ -1,4 +1,3 @@
-
 - name: restart haproxy
   systemd:
     name: haproxy
@@ -6,3 +5,11 @@
     daemon_reload: yes
     enabled: yes
   register: haproxy_restarted
+
+- name: restart keepalived
+  systemd:
+    name: keepalived
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  register: keepalived_restarted
