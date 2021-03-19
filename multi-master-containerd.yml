@@ -41,12 +41,13 @@
     - master
   tags: master
 
-- name: 6. 部署Nginx负载均衡并高可用
+- name: 6. 部署负载均衡并高可用
   gather_facts: false
   hosts: lb
   roles:
     - nginx
-  tags: nginx
+  #  - haproxy
+  tags: HA
 
 - name: 7.部署K8S Node
   gather_facts: false
