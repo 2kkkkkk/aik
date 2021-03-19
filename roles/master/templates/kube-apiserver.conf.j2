@@ -25,4 +25,12 @@ KUBE_APISERVER_OPTS="--logtostderr=false \
 --audit-log-maxage=30 \
 --audit-log-maxbackup=3 \
 --audit-log-maxsize=100 \
---audit-log-path={{ k8s_work_dir }}/logs/k8s-audit.log"
+--audit-log-path={{ k8s_work_dir }}/logs/k8s-audit.log" \
+--runtime-config=api/all=true \
+--requestheader-allowed-names=aggregator \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--requestheader-extra-headers-prefix=X-Remote-Extra- \
+--requestheader-client-ca-file={{ k8s_work_dir }}/ssl/ca.pem \
+--proxy-client-cert-file={{ k8s_work_dir }}/ssl/proxy-client.pem \
+--proxy-client-key-file={{ k8s_work_dir }}/ssl/proxy-client-key.pem

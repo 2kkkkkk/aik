@@ -32,7 +32,8 @@
     - ca-csr.json.j2  
     - server-csr.json.j2
     - admin-csr.json.j2
-    - kube-proxy-csr.json.j2  
+    - kube-proxy-csr.json.j2
+    - proxy-client-csr.json.j2
 
 - name: 准备生成k8s证书脚本
   copy: src=generate_k8s_cert.sh dest={{ root_dir.stdout }}/ssl/k8s mode=u+x

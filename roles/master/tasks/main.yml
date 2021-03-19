@@ -36,6 +36,8 @@
     - ca.pem
     - server.pem
     - server-key.pem
+    - proxy-client.pem
+    - proxy-client-key.pem
 
 - name: 分发token文件
   copy: src=token.csv dest={{ k8s_work_dir }}/cfg

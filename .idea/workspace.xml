@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d3a7f8a6-ba2f-4537-b05a-4dc278bbd78b" name="默认变更列表" comment="更新记录" />
+    <list default="true" id="d3a7f8a6-ba2f-4537-b05a-4dc278bbd78b" name="默认变更列表" comment="更新记录">
+      <change afterPath="$PROJECT_DIR$/roles/tls/templates/k8s/proxy-client-csr.json.j2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/roles/master/tasks/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/roles/master/tasks/main.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/roles/tls/files/generate_k8s_cert.sh" beforeDir="false" afterPath="$PROJECT_DIR$/roles/tls/files/generate_k8s_cert.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/roles/tls/tasks/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/roles/tls/tasks/main.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,7 +16,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -24,7 +30,12 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/roles/tls/templates/k8s" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\zk\Desktop\aik_kubernetes\aik\roles\tls\templates\k8s" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -69,7 +80,21 @@
       <option name="project" value="LOCAL" />
       <updated>1615189857020</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="更新记录">
+      <created>1616126577210</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1616126577210</updated>
+    </task>
+    <task id="LOCAL-00003" summary="更新记录">
+      <created>1616126657090</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1616126657090</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
