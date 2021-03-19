@@ -1,8 +1,4 @@
 ---
-- name: 允许Node加入集群
-  ignore_errors: yes
-  shell: kubectl certificate approve $(kubectl get csr |awk 'NR!=1{print $1}')
-
 ###### addon Option I
 - name: "获取etcd-ca证书"
   slurp:
@@ -50,7 +46,6 @@
   tags:
     - metrics-server
   when: addons_Option_I
-
 
 
 ###### addon Option II

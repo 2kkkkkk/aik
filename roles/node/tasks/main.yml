@@ -58,6 +58,11 @@
     - kubelet
     - kube-proxy
 
+- name: 允许Node加入集群
+  ignore_errors: yes
+  delegate_to: "{{ groups['master'][0] }}"
+  shell: kubectl certificate approve $(kubectl get csr |awk 'NR!=1{print $1}')
+
 - name: 分发预准备镜像
   copy: src={{ software_dir }}/image.tar.gz dest={{ tmp_dir }}
   when: Offline_mirroring
