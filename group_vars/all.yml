@@ -43,8 +43,6 @@ containerd_config:
 
 
 # 高可用，如果部署单Master，该项忽略
-HA_Master: '172.16.163.111'
-HA_Backup: '172.16.163.112'
 vip: '172.16.163.110'
 nic: 'ens192' 
 
