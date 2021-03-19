@@ -27,8 +27,9 @@ TASK [addons : 创建Dashboard管理员令牌
 
 3、无法执行kubectl top node 命令 错误分析 Metrics Server 无法访问 Apiserver 问题  未解决
 解决方法：
-1、生成Metrics Server证书
-2、apiserver打开API 聚合，需修改api-server.conf配置文件
+1、生成Metrics Server证书   已完成
+2、修改证书生产脚本  已完成
+2、apiserver打开API 聚合，需修改api-server.conf配置文件 已完成
 
 需求
 已完成
