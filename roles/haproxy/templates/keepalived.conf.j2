@@ -1,5 +1,13 @@
+{% if lb_name == 'lb-master' %}
+  {% set role = 'MASTER' %}
+  {% set priority = 100 %}
+{% elif lb_name == 'lb-backup' %}
+  {% set role = 'BACKUP' %}
+  {% set priority = 90 %}
+{% endif %}
+
 global_defs {
-   router_id k8s
+   router_id k8s_{{ role }}
 }
 
 vrrp_script Checkhaproxy {
@@ -11,10 +19,10 @@ vrrp_script Checkhaproxy {
 }
 
 vrrp_instance VI_1 {
-    state {{ type }}
-    interface {{ ansible_default_ipv4.interface }}
+    state {{ role }}
+    interface {{ nic }}
     virtual_router_id  100
-    priority {{priority}}
+    priority {{  priority }}
     advert_int 1
     nopreempt
     mcast_src_ip {{ ansible_default_ipv4.address }}
