@@ -1,5 +1,4 @@
 #### kubernetes安装设置
-# Kubernetes
 # kubernetes 下载服务器地址，默认的下载服务器比较慢，建议按照文档自建 暂不支持后续开放
 kube_down_url: http://www.2kk.com
 # 安装目录
@@ -13,46 +12,14 @@ cluster_dns: '10.1.0.2'   # 与roles/addons/files/coredns.yaml中IP一致，并�
 pod_cidr: '10.244.0.0/16' # 与roles/addons/files/kube-flannel.yaml中网段一致，集群Pod网段
 service_nodeport_range: '30000-32767'
 cluster_domain: 'cluster.local'
-
+# Kubernetes
 kubernetes:
   # kubernetes 版本
-  version: v1.19.8
+  version: v1.20.5
   # 集群Pod网段 需以上面的集群网络保持一致
   podSubnet: 10.244.0.0/16
   # 集群Service网段 需以上面的集群网络保持一致
   serviceSubnet: 10.1.0.0/24
-
-#### 容器设置
-#容器引擎选型和高可用选型，未实现暂时不可用
-#选择容器引擎 "1.containerd 2.docker"
-  ##container: docker
-#High_availability: yes
-# ha选型 " 1.haproxy  2.nginx "
-#ha_model_selection: nginx
-# Containerd 的设置暂不开放 预留
-# Containerd
-critools_version: v1.20.0
-# containerd 版本
-containerd_version: 1.4.3
-containerd_root: "/var/lib/containerd"
-containerd_state: "/run/containerd"
-containerd_config:
-  grpc:
-    max_recv_message_size: 16777216
-    max_send_message_size: 16777216
-  debug:
-    level: ""
-  cri:
-    sandbox_image: "registry.aliyuncs.com/google_containers/pause:3.3"
-    max_container_log_line_size: -1
-  containerd:
-    snapshotter: overlayfs
-  options:
-    SystemdCgroup: "true"
-  registries:
-    "docker.io": "https://dockerhub.mirrors.nwafu.edu.cn"
-    "k8s.gcr.io": "https://registry.aliyuncs.com/k8sxio"
-
 
 #### 高可用设置
 # 高可用，如果部署单Master，该项忽略
@@ -78,18 +45,16 @@ have_network: yes
 # 是否修改 yum 源或 apt 源为阿里云，注意，会清空原有的源配置
 replace_repo: yes
 
-
-# 选择插件方案
+# 选择网络插件方案
 addons_Option_I: yes
 addons_Option_II: no
-
 # 目前只支持addons_Option_I 配置
 # Network Plugin
 # 选择你要部署的网络组件 
 # calico:作为老牌网络解决方案，可圈可点，已被 github 等公司用于生产
 # flannel:配置简单，性能弱低于 calico，redis 测试中稍占上风。大并发下稳定性稍低
 # cilium:在大并发环境下，稳定性更好，期待后续版本性能有所提升。在 http 8k qps 的情况下，请求 100% 成功了，而calico和flannel 都有一定比例的失败。
-network_plugin: flannel
+network_plugin: calico
 calico:
   version: v3.17.0
   network_mode: ipip
@@ -109,7 +74,6 @@ coredns:
   nodelocaldns_ip: "169.254.20.10"
 metrics_server:
   version: v0.4.1
-
 
 # 自签证书可信任IP列表，为方便扩展，可添加多个预留IP
 cert_hosts:
