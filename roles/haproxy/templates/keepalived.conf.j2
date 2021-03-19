@@ -1,9 +1,11 @@
 {% if lb_name == 'lb-master' %}
   {% set role = 'MASTER' %}
   {% set priority = 100 %}
+  {% set Ha_ip = {{ HA_Master }} %}
 {% elif lb_name == 'lb-backup' %}
   {% set role = 'BACKUP' %}
   {% set priority = 90 %}
+  {% set Ha_ip = {{ HA_Backup }} %}
 {% endif %}
 
 global_defs {
@@ -25,7 +27,7 @@ vrrp_instance VI_1 {
     priority {{  priority }}
     advert_int 1
     nopreempt
-    mcast_src_ip {{ ansible_default_ipv4.address }}
+    mcast_src_ip {{ Ha_ip }}
     authentication {
         auth_type PASS
         auth_pass kuburnetes
