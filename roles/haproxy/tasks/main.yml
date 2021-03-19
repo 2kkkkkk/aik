@@ -13,6 +13,7 @@
   yum:
     name: keepalived
     state: present
+
 - name: "拷贝keepalived.conf文件"
   template:
     src: "keepalived.conf.j2"
