@@ -5,13 +5,12 @@
 自动化安装 node   已完成      2021-3-3
 自动化安装 etcd   已完成      2021-3-4
 自动化安装 addons 已完成      2021-3-6
-添加 网络方案选择模块 分为方案1 和方案2 已完成  问题遗留:方案2 yaml文件有问题 但可用 待优化   2021-3-7
 自动化安装 nginx ha  已完成  离线已完成  在线yum 报错     2021-3-5
-自动化安装 containerd  未完成
-自动化 critools  未完成
-自动化安装 haproxy ha 未完成
-
-
+添加补齐命令 已添加
+添加离线加载镜像模块 yes代表载入 no 代表从网络拉取 不载入  已添加
+Metrics Server 无法访问 Apiserver 问题  已修复
+修复master模块报错 多次执行 已修复
+插件报错Dashboard   已修复
 
 修复bug：
 1、修复master模块报错      2021-3-6
@@ -31,16 +30,10 @@ TASK [addons : 创建Dashboard管理员令牌
 2、修改证书生成脚本  已完成
 2、apiserver打开API 聚合，需修改api-server.conf配置文件 已完成
 
-需求
-已完成
-添加补齐命令 已添加
-添加离线加载镜像模块 yes代表载入 no 代表从网络拉取 不载入  已添加
-待完成
-添加kubernetes新版本所推荐的容器引擎 containerd
-自定义选择高可用工具
+未完成：
+HA_nginx yum 安装nginx 配置文件报错  第13行
+优化网络方案2yaml
+自动化安装 containerd  未完成
+自动化安装 critools  未完成
 自动打污点
 自动打标签
-
-后续优化
-nginx ha yum安装 配置文件报错 第13行
-
