@@ -48,7 +48,7 @@ containerd_config:
   options:
     SystemdCgroup: "true"
   registries:
-    "docker.io": "https://dockerhub.mirrors.nwafu.edu.cn"
+    "docker.io": "https://b9pmyelo.mirror.aliyuncs.com"
     "k8s.gcr.io": "https://registry.aliyuncs.com/k8sxio"
 
 
