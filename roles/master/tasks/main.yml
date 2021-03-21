@@ -102,6 +102,8 @@
 
 - name: 自动审批Kubelet证书
   ignore_errors: yes
+  delegate_to: "{{ groups['master'][0] }}"
+  run_once: true
   shell: |
      #自动批准首次申请证书的 CSR 请求 
      kubectl create clusterrolebinding node-client-auto-approve-csr --clusterrole=system:certificates.k8s.io:certificatesigningrequests:nodeclient --user=kubelet-bootstrap 
