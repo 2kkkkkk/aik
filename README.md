@@ -1,5 +1,4 @@
-# Kubernetes 高可用集群自动部署 二进制 
->### 确保所有节点系统时间一致
+# Kubernetes v1.20 企业级高可用集群自动部署 二进制 
 
 ### 1、找一台服务器安装Ansible
 ```
@@ -50,7 +49,6 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 ```
 # git clone https://gitee.com/Zheng--Kai/aik.git
 # cd aik
-
 ```
 
 下载准备好软件包并解压/root目录：
