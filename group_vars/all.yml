@@ -25,7 +25,7 @@ kubernetes:
 # containerd容器引擎，未实现暂时不可用
 # 选择容器引擎 "1.containerd 2.docker"
 # Containerd容器引擎的设置暂不开放 预留
-# Containerd
+# kubelet_container配置文件，containerd docker 二选一 如果使用docker这里就改为docker，反之containerd
 container: containerd
 critools_version: v1.20.0
 # containerd 版本
