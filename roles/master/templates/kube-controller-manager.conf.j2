@@ -2,7 +2,7 @@ KUBE_CONTROLLER_MANAGER_OPTS="--logtostderr=false \
 --v=2 \
 --log-dir={{ k8s_work_dir }}/logs \
 --leader-elect=true \
---master=127.0.0.1:8080 \
+--kubeconfig=/opt/kubernetes/cfg/kube-controller-manager.kubeconfig \
 --bind-address=127.0.0.1 \
 --allocate-node-cidrs=true \
 --cluster-cidr={{ pod_cidr }} \
@@ -11,4 +11,4 @@ KUBE_CONTROLLER_MANAGER_OPTS="--logtostderr=false \
 --cluster-signing-key-file={{ k8s_work_dir }}/ssl/ca-key.pem  \
 --root-ca-file={{ k8s_work_dir }}/ssl/ca.pem \
 --service-account-private-key-file={{ k8s_work_dir }}/ssl/ca-key.pem \
---experimental-cluster-signing-duration=87600h0m0s"
+--cluster-signing-duration=87600h0m0s"

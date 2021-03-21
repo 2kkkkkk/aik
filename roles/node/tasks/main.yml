@@ -16,7 +16,7 @@
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
 
-- name: 分发并解压k8s二进制包
+- name: 分发并解压k8s二进制包（需要花费一些时间...）
   unarchive: src={{ item }} dest={{ tmp_dir }}
   with_fileglob:
     - "{{ software_dir }}/kubernetes-*.tar.gz"
@@ -58,17 +58,11 @@
     - kubelet
     - kube-proxy
 
-- name: 允许Node加入集群
-  ignore_errors: yes
-  delegate_to: "{{ groups['master'][0] }}"
-  run_once: true
-  shell: kubectl certificate approve $(kubectl get csr |awk 'NR!=1{print $1}')
-
-- name: 分发预准备镜像
+- name: 分发预准备镜像（需要花费一些时间...）
   copy: src={{ software_dir }}/image.tar.gz dest={{ tmp_dir }}
   when: Offline_mirroring
-
-- name: 导入镜像
+  
+- name: 导入镜像（需要花费一些时间...）
   shell: cd {{ tmp_dir }} && \
          tar zxf image.tar.gz && \
          for image in $(ls *.tar);do docker load < $image;done

@@ -22,15 +22,17 @@ KUBE_APISERVER_OPTS="--logtostderr=false \
 --etcd-cafile={{ k8s_work_dir }}/ssl/etcd/ca.pem \
 --etcd-certfile={{ k8s_work_dir }}/ssl/etcd/server.pem \
 --etcd-keyfile={{ k8s_work_dir }}/ssl/etcd/server-key.pem \
+--service-account-issuer=api \
+--service-account-signing-key-file={{ k8s_work_dir }}/ssl/server-key.pem \
+--requestheader-client-ca-file={{ k8s_work_dir }}/ssl/ca.pem \
+--proxy-client-cert-file={{ k8s_work_dir }}/ssl/server.pem \
+--proxy-client-key-file={{ k8s_work_dir }}/ssl/server-key.pem \
+--requestheader-allowed-names=kubernetes \
+--requestheader-extra-headers-prefix=X-Remote-Extra- \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--enable-aggregator-routing=true \
 --audit-log-maxage=30 \
 --audit-log-maxbackup=3 \
 --audit-log-maxsize=100 \
---audit-log-path={{ k8s_work_dir }}/logs/k8s-audit.log" \
---runtime-config=api/all=true \
---requestheader-allowed-names=aggregator \
---requestheader-group-headers=X-Remote-Group \
---requestheader-username-headers=X-Remote-User \
---requestheader-extra-headers-prefix=X-Remote-Extra- \
---requestheader-client-ca-file={{ k8s_work_dir }}/ssl/ca.pem \
---proxy-client-cert-file={{ k8s_work_dir }}/ssl/proxy-client.pem \
---proxy-client-key-file={{ k8s_work_dir }}/ssl/proxy-client-key.pem
+--audit-log-path={{ k8s_work_dir }}/logs/k8s-audit.log"

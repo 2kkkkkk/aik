@@ -29,8 +29,12 @@
     - ca-key.pem
     - server.pem
     - server-key.pem
-    - proxy-client.pem
-    - proxy-client-key.pem
+    - kube-controller-manager.pem
+    - kube-controller-manager-key.pem
+    - kube-scheduler.pem
+    - kube-scheduler-key.pem
+    - admin.pem
+    - admin-key.pem
 
 - name: 分发etcd证书
   copy: src=etcd_cert/{{ item }} dest={{ k8s_work_dir }}/ssl/etcd
@@ -38,7 +42,6 @@
     - ca.pem
     - server.pem
     - server-key.pem
-
 
 - name: 分发token文件
   copy: src=token.csv dest={{ k8s_work_dir }}/cfg
@@ -49,6 +52,8 @@
     - kube-apiserver.conf.j2
     - kube-controller-manager.conf.j2
     - kube-scheduler.conf.j2
+    - kube-controller-manager.kubeconfig.j2
+    - kube-scheduler.kubeconfig.j2
 
 - name: 分发service文件
   template: src={{ item }} dest=/usr/lib/systemd/system/{{ item.split('.')[:-1]|join('.') }}
@@ -63,6 +68,11 @@
     - kube-apiserver
     - kube-controller-manager
     - kube-scheduler
+
+- name: 创建kubectl配置文件目录
+  file: dest=/root/.kube state=directory
+- name: 分发k8s配置文件
+  template: src=config.j2 dest=/root/.kube/config
 
 - name: 查看集群状态
   shell: sleep 3 && kubectl get cs
@@ -85,6 +95,18 @@
   ignore_errors: yes
   delegate_to: "{{ groups['master'][0] }}"
   run_once: true
-  shell: sleep 3 && kubectl apply -f {{ tmp_dir }}/apiserver-to-kubelet-rbac.yaml && \
-         kubectl apply -f {{ tmp_dir }}/kubelet-bootstrap-rbac.yaml
+  shell: |
+      sleep 3
+      kubectl apply -f {{ tmp_dir }}/apiserver-to-kubelet-rbac.yaml
+      kubectl apply -f {{ tmp_dir }}/kubelet-bootstrap-rbac.yaml
+
+- name: 自动审批Kubelet证书
+  ignore_errors: yes
+  shell: |
+     #自动批准首次申请证书的 CSR 请求 
+     kubectl create clusterrolebinding node-client-auto-approve-csr --clusterrole=system:certificates.k8s.io:certificatesigningrequests:nodeclient --user=kubelet-bootstrap 
+     # 自动批准kubelet客户端证书续签 
+     kubectl create clusterrolebinding node-client-auto-renew-crt --clusterrole=system:certificates.k8s.io:certificatesigningrequests:selfnodeclient --group=system:nodes 
+     # 自动批准kubelet服务端证书续签 
+     kubectl create clusterrolebinding node-server-auto-renew-crt --clusterrole=system:certificates.k8s.io:certificatesigningrequests:selfnodeserver --group=system:nodes
 
