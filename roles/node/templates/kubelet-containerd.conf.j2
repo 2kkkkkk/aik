@@ -9,6 +9,7 @@ KUBELET_OPTS="--logtostderr=false \
 --cert-dir={{ k8s_work_dir }}/ssl \
 --pod-infra-container-image=registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2" \
 --container-runtime=remote \
---runtime-request-timeout=15m \
---container-runtime-endpoint=unix://{{containerd_state}}/containerd.sock
+--runtime-cgroups=/system.slice/containerd.service \
+--container-runtime-endpoint=unix://{{containerd_state}}/containerd.sock \
+--image-service-endpoint=unix://{{containerd_state}}/containerd.sock
 
