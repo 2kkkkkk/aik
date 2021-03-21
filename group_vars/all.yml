@@ -28,7 +28,7 @@ kubernetes:
 # Containerd
 critools_version: v1.20.0
 # containerd 版本
-containerd_version: 1.4.3
+containerd_version: 1.4.4
 containerd_root: "/var/lib/containerd"
 containerd_state: "/run/containerd"
 containerd_config:
@@ -38,7 +38,7 @@ containerd_config:
   debug:
     level: ""
   cri:
-    sandbox_image: "registry.aliyuncs.com/google_containers/pause:3.3"
+    sandbox_image: "registry.aliyuncs.com/google_containers/pause:3.2"
     max_container_log_line_size: -1
   containerd:
     snapshotter: overlayfs
