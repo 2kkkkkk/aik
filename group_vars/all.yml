@@ -26,6 +26,7 @@ kubernetes:
 # 选择容器引擎 "1.containerd 2.docker"
 # Containerd容器引擎的设置暂不开放 预留
 # Containerd
+container: containerd
 critools_version: v1.20.0
 # containerd 版本
 containerd_version: 1.4.4

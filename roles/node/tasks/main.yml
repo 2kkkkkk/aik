@@ -40,7 +40,7 @@
   template: src={{ item }} dest={{ k8s_work_dir }}/cfg/{{ item.split('.')[:-1]|join('.') }}
   with_items:
     - bootstrap.kubeconfig.j2
-    - kubelet.conf.j2
+    - kubelet-{{ container }}.conf.j2
     - kubelet-config.yml.j2
     - kube-proxy.kubeconfig.j2
     - kube-proxy.conf.j2

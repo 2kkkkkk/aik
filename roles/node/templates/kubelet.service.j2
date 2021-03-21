@@ -3,7 +3,7 @@ Description=Kubernetes Kubelet
 After=docker.service
 
 [Service]
-EnvironmentFile={{ k8s_work_dir }}/cfg/kubelet.conf
+EnvironmentFile={{ k8s_work_dir }}/cfg/kubelet-{{ container }}.conf
 ExecStart={{ k8s_work_dir }}/bin/kubelet $KUBELET_OPTS
 Restart=on-failure
 LimitNOFILE=65536
