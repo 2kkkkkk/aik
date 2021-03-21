@@ -82,7 +82,7 @@ addons_Option_II: no
 # calico:作为老牌网络解决方案，可圈可点，已被 github 等公司用于生产
 # flannel:配置简单，性能弱低于 calico，redis 测试中稍占上风。大并发下稳定性稍低
 # cilium:在大并发环境下，稳定性更好，期待后续版本性能有所提升。在 http 8k qps 的情况下，请求 100% 成功了，而calico和flannel 都有一定比例的失败。
-network_plugin: flannel
+network_plugin: calico
 calico:
   version: v3.17.0
   network_mode: ipip
