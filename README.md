@@ -1,5 +1,7 @@
-# Kubernetes v1.20 企业级高可用集群自动部署 二进制 
-
+# Kubernetes 企业级高可用集群
+``` 
+支持的kubernetes版本：v1.19 v1.20
+```
 ### 1、找一台服务器安装Ansible
 ```
 # 需要安装python3 用pip3安装ansible
@@ -53,8 +55,6 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 
 下载准备好软件包并解压/root目录：
 
-只对1.19.8进行安装测试
-
 链接: https://pan.baidu.com/s/1U-566cbdqXGOP7JEkB5Y1g
 
 提取码: 2kkk
@@ -86,7 +86,7 @@ ansible -i hosts all  -m shell -a "date" -uroot -k
 ...
 ```
 修改group_vars/all.yml文件，修改软件包目录和证书可信任IP。
-每段参数都有备注，注意ip是对的 网络保持一致
+其他参数都有备注，注意ip是对的 网络保持一致
 ```
 # vim group_vars/all.yml
 software_dir: '/root/binary_pkg'
@@ -103,13 +103,26 @@ cert_hosts:
 多Master架构
 ![avatar](https://images.gitee.com/uploads/images/2021/0225/170745_b7ba1da3_8721850.jpeg "multi-master.jpg")
 
+###Containerd容器引擎 待开发
+
+多Master版：
+```
+# ansible-playbook -i hosts multi-master-containerd.yml -uroot -k
+```
 单Master版：
 ```
-# ansible-playbook -i hosts single-master-docker.yml -uroot -k
+# ansible-playbook -i hosts single-master-containerd.yml -uroot -k
 ```
+
+###Docker容器引擎 1.23版本弃用
+
 多Master版：
 ```
 # ansible-playbook -i hosts multi-master-docker.yml -uroot -k
+```
+单Master版：
+```
+# ansible-playbook -i hosts single-master-docker.yml -uroot -k
 ```
 
 ## 5、部署控制
@@ -124,13 +137,14 @@ cert_hosts:
 1）修改hosts，添加新节点ip
 ```
 # vim hosts
+[newnode]
+172.16.163.100 node_name=k8s-node3
 ```
 2）执行部署
 ```
 ansible-playbook -i hosts add-node.yml -uroot -k
 ```
-3）在Master节点允许颁发证书并加入集群
+## 7、所有HTTPS证书存放路径
 ```
-kubectl get csr
-kubectl certificate approve node-csr-xxx
+部署产生的证书都会存放到目录“aik/ssl”
 ```
