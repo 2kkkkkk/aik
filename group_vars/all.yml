@@ -1,6 +1,6 @@
 #### kubernetes安装设置
 # kubernetes 下载服务器地址，默认的下载服务器比较慢，建议按照文档自建 暂不支持后续开放
-kube_down_url: http://www.2kk.com
+kube_down_url: http://172.16.163.109
 # 安装目录
 software_dir: '/root/binary_pkg'
 k8s_work_dir: '/opt/kubernetes'
