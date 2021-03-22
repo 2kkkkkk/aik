@@ -15,7 +15,7 @@ cluster_domain: 'cluster.local'
 # Kubernetes
 kubernetes:
   # kubernetes 版本
-  version: v1.19.8
+  version: v1.20.5
   # 集群Pod网段 需以上面的集群网络保持一致
   podSubnet: 10.244.0.0/16
   # 集群Service网段 需以上面的集群网络保持一致
