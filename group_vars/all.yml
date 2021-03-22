@@ -15,7 +15,7 @@ cluster_domain: 'cluster.local'
 # Kubernetes
 kubernetes:
   # kubernetes 版本
-  version: v1.20.5
+  version: v1.19.8
   # 集群Pod网段 需以上面的集群网络保持一致
   podSubnet: 10.244.0.0/16
   # 集群Service网段 需以上面的集群网络保持一致
@@ -26,9 +26,9 @@ kubernetes:
 # 选择容器引擎 "1.containerd 2.docker"
 # Containerd容器引擎的设置暂不开放 预留
 # 告诉kubernetes你部署的是哪一个容器 有两种可选containerd和docker
-
-container: containerd
-
+#暂不可用，只能选docker
+container: docker
+#暂不可用
 critools_version: v1.20.0
 # containerd 版本
 containerd_version: 1.4.4
