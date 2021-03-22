@@ -1,0 +1,10 @@
+# harbor version，完整版本号.
+HARBOR_VER: "v1.10.1"
+
+# harbor 主版本号，目前支持主版本号 v1.5/v1.6/v1.7/v1.10
+# 从完整版本号提取出主版本号 v1.5/v1.6/v1.7
+HARBOR_VER_MAIN: "{{ HARBOR_VER.split('.')[0] }}.{{ HARBOR_VER.split('.')[1] }}"
+
+# 设置 harbor 的 http，https 的端口号, v1.5/v1.6/v1.7 不支持修改，v1.8 版本开始可支持修改
+HTTP_PORT: 12501
+HTTPS_PORT: 12502
