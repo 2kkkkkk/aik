@@ -5,6 +5,7 @@ kube_down_url: http://172.16.163.109
 software_dir: '/root/binary_pkg'
 k8s_work_dir: '/opt/kubernetes'
 etcd_work_dir: '/opt/etcd'
+containerd_work_dir: "/opt/containerd"
 tmp_dir: '/tmp/k8s'
 # 集群网络
 service_cidr: '10.1.0.0/24' #集群Service网段
