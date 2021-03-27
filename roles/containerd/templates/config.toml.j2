@@ -1,9 +1,9 @@
-root = "{{ CONTAINERD_STORAGE_DIR }}"
-state = "/run/containerd"
+root = "{{ containerd_root }}"
+state = "{{ containerd_state }}"
 oom_score = -999
 
 [grpc]
-  address = "/run/containerd/containerd.sock"
+  address = "{{ containerd_state }}/containerd.sock"
   uid = 0
   gid = 0
   max_recv_message_size = 16777216
@@ -29,7 +29,7 @@ oom_score = -999
     stream_server_address = "127.0.0.1"
     stream_server_port = "0"
     enable_selinux = false
-    sandbox_image = "{{ SANDBOX_IMAGE }}"
+    sandbox_image = "{{ sandbox_image }}"
     stats_collect_period = 10
     systemd_cgroup = false
     enable_tls_streaming = false
@@ -49,7 +49,7 @@ oom_score = -999
       bin_dir = "/opt/cni/bin"
       conf_dir = "/etc/cni/net.d"
       conf_template = "/etc/cni/net.d/10-default.conf"
-{% if ENABLE_MIRROR_REGISTRY %}
+{% if enable_mirror_warehouse %}
     [plugins.cri.registry]
       [plugins.cri.registry.mirrors]
         # reference from https://www.ilanni.com/?p=14534

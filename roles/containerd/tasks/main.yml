@@ -28,7 +28,6 @@
   shell: cp -rf {{ tmp_dir }}/containerd/usr/local/bin/{containerd,containerd-shim,containerd-shim-runc-v1,containerd-shim-runc-v2,ctr,crictl} {{ containerd_work_dir }}/bin && \
          cp -rf {{ tmp_dir }}/containerd/usr/local/sbin/runc {{ containerd_work_dir }}/bin
 
-
 - name: 创建 containerd 配置文件
   template: src=config.toml.j2 dest=/etc/containerd/config.toml
   tags: upgrade

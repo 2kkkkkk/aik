@@ -23,46 +23,18 @@ kubernetes:
   serviceSubnet: 10.1.0.0/24
 
 #### containerd容器安装
-# containerd容器引擎，未实现暂时不可用
-# 选择容器引擎 "1.containerd 2.docker"
-# Containerd容器引擎的设置暂不开放 预留
-# 告诉kubernetes你部署的是哪一个容器 有两种可选containerd和docker
-#暂不可用，只能选docker
+# Cluster container-runtime supported: docker, containerd
 container: containerd
-#暂不可用
-critools_version: v1.20.0
-# containerd 版本
-containerd_version: 1.4.4
-containerd_root: "/var/lib/containerd"
-containerd_state: "/run/containerd"
-containerd_config:
-  grpc:
-    max_recv_message_size: 16777216
-    max_send_message_size: 16777216
-  debug:
-    level: ""
-  cri:
-    sandbox_image: "registry.aliyuncs.com/google_containers/pause:3.2"
-    max_container_log_line_size: -1
-  containerd:
-    snapshotter: overlayfs
-  options:
-    SystemdCgroup: "true"
-  registries:
-    "docker.io": "https://b9pmyelo.mirror.aliyuncs.com"
-    "k8s.gcr.io": "https://registry.aliyuncs.com/k8sxio"
-
 # [containerd]基础容器镜像
 # kubelet
-SANDBOX_IMAGE: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
+sandbox_image: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
 
 # [containerd]容器持久化存储目录
-CONTAINERD_STORAGE_DIR: "/var/lib/containerd"
+containerd_root: "/var/lib/containerd"
+containerd_state: "/run/containerd"
 
 # [.]启用容器仓库镜像
-ENABLE_MIRROR_REGISTRY: true
-
-
+enable_mirror_warehouse: true
 
 #### 高可用设置
 # 高可用，如果部署单Master，该项忽略
