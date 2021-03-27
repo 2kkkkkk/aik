@@ -1,12 +1,4 @@
 ---
-- name: 获取是否已经安装docker
-  shell: 'systemctl status docker|grep Active || echo "NoFound"'
-  register: docker_svc
-
-- name: 获取是否已经安装containerd
-  shell: 'systemctl status containerd|grep Active || echo "NoFound"'
-  register: containerd_svc
-
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
 
