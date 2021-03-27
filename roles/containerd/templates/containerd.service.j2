@@ -4,8 +4,9 @@ Documentation=https://containerd.io
 After=network.target
 
 [Service]
-Environment="PATH={{ bin_dir }}:/bin:/sbin:/usr/bin:/usr/sbin"
-ExecStart={{ bin_dir }}/containerd
+Environment="PATH={{ containerd_work_dir }}:/bin:/sbin:/usr/bin:/usr/sbin"
+ExecStartPre=-/sbin/modprobe overlay
+ExecStart={{ containerd_work_dir }}/containerd
 Restart=always
 RestartSec=5
 Delegate=yes
