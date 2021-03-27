@@ -25,7 +25,7 @@ KUBE_APISERVER_OPTS="--logtostderr=false \
 --client-ca-file={{ k8s_work_dir }}/ssl/ca.pem \
 --endpoint-reconciler-type=lease \
 --service-account-key-file={{ k8s_work_dir }}/ssl/ca-key.pem \
---service-account-issuer=api \
+--service-account-issuer=kubernetes.default.svc \
 --service-account-signing-key-file={{ k8s_work_dir }}/ssl/server-key.pem \
 --requestheader-client-ca-file={{ k8s_work_dir }}/ssl/ca.pem \
 --proxy-client-cert-file={{ k8s_work_dir }}/ssl/server.pem \
