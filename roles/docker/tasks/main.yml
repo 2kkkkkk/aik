@@ -1,4 +1,12 @@
 ---
+- name: 获取是否已经安装docker
+  shell: 'systemctl status docker|grep Active || echo "NoFound"'
+  register: docker_svc
+
+- name: 获取是否已经安装containerd
+  shell: 'systemctl status containerd|grep Active || echo "NoFound"'
+  register: containerd_svc
+
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
 
@@ -23,15 +31,15 @@
   systemd: name=docker state=restarted enabled=yes daemon_reload=yes
 
 - name: 轮询等待docker服务运行
-      shell: "systemctl status docker.service|grep Active"
-      register: docker_status
-      until: '"running" in docker_status.stdout'
-      retries: 8
-      delay: 2
-      tags: upgrade_docker
+  shell: "systemctl status docker.service|grep Active"
+  register: docker_status
+  until: '"running" in docker_status.stdout'
+  retries: 8
+  delay: 2
+  tags: upgrade_docker
 
 - name: docker命令自动补全
-      copy: src=docker dest=/etc/bash_completion.d/docker mode=0644
+  copy: src=docker dest=/etc/bash_completion.d/docker mode=0644
 
 - name: 查看状态
   shell: docker info
