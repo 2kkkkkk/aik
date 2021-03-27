@@ -7,7 +7,7 @@
   when: '"running" in docker_status.stdout'
 
 - name: 创建临时目录
-  file: dest={{ tmp_dir }}\containerd state=directory
+  file: dest={{ tmp_dir }}/containerd state=directory
 
 - name: 准备containerd相关目录
   file: dest={{ containerd_work_dir }}/{{ item }} state=directory
