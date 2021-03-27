@@ -27,7 +27,7 @@ kubernetes:
 # Containerd容器引擎的设置暂不开放 预留
 # 告诉kubernetes你部署的是哪一个容器 有两种可选containerd和docker
 #暂不可用，只能选docker
-container: docker
+container: containerd
 #暂不可用
 critools_version: v1.20.0
 # containerd 版本
