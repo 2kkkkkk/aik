@@ -74,6 +74,33 @@
 - name: 分发k8s配置文件
   template: src=config.j2 dest=/root/.kube/config
 
+# 轮询等待kube-apiserver启动完成
+- name: 轮询等待kube-apiserver启动
+  shell: "systemctl status kube-apiserver.service|grep Active"
+  register: api_status
+  until: '"running" in api_status.stdout'
+  retries: 10
+  delay: 3
+  tags: upgrade_k8s, restart_master
+
+# 轮询等待kube-controller-manager启动完成
+- name: 轮询等待kube-controller-manager启动
+  shell: "systemctl status kube-controller-manager.service|grep Active"
+  register: cm_status
+  until: '"running" in cm_status.stdout'
+  retries: 8
+  delay: 3
+  tags: upgrade_k8s, restart_master
+
+# 轮询等待kube-scheduler启动完成
+- name: 轮询等待kube-scheduler启动
+  shell: "systemctl status kube-scheduler.service|grep Active"
+  register: sch_status
+  until: '"running" in sch_status.stdout'
+  retries: 8
+  delay: 3
+  tags: upgrade_k8s, restart_master
+
 - name: 查看集群状态
   shell: sleep 3 && kubectl get cs
   register: cs
