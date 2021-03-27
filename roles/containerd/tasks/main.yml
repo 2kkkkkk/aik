@@ -9,12 +9,11 @@
 - name: 创建临时目录
   file: dest={{ tmp_dir }}/containerd state=directory
 
-- name: 准备containerd相关目录
-  file: dest={{ containerd_work_dir }}/{{ item }} state=directory
+- name: 准备containerd工作目录
+  file: dest={{ item }} state=directory
   with_items:
-  - bin
-  - lib
   - "/etc/containerd"
+  - "{{ containerd_work_dir }}/bin"
 
 - name: 加载内核模块 overlay
   modprobe: name=overlay state=present
@@ -26,8 +25,8 @@
   tags: upgrade
 
 - name: 移动containerd二进制文件
-  shell: cp -rf {{ tmp_dir }}/containerd/usr/local/bin/{containerd,containerd-shim,containerd-shim-runc-v1,containerd-shim-runc-v2,ctr,crictl} {{ containerd_work_dir }}/bin && \
-         cp -rf {{ tmp_dir }}/containerd/usr/local/sbin/runc {{ containerd_work_dir }}/bin
+  shell: cp -rf {{ tmp_dir }}/usr/local/bin/{containerd,containerd-shim,containerd-shim-runc-v1,containerd-shim-runc-v2,ctr,crictl} {{ containerd_work_dir }}/bin && \
+         cp -rf {{ tmp_dir }}/usr/local/sbin/runc {{ containerd_work_dir }}/bin
 
 
 - name: 创建 containerd 配置文件
