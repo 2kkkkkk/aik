@@ -13,19 +13,11 @@ cluster_dns: '10.1.0.2'   # 与roles/addons/files/coredns.yaml中IP一致，并�
 pod_cidr: '10.244.0.0/16' # 与roles/addons/files/calico.yaml中网段一致，集群Pod网段
 service_nodeport_range: '30000-32767'
 cluster_domain: 'cluster.local'
-# Service proxy mode of kube-proxy: 'iptables' or 'ipvs'
+# kube-proxy的服务代理模式: 'iptables' or 'ipvs'
 proxy_mode: "ipvs"
-# Kubernetes
-kubernetes:
-  # kubernetes 版本
-  version: v1.20.5
-  # 集群Pod网段 需以上面的集群网络保持一致
-  podSubnet: 10.244.0.0/16
-  # 集群Service网段 需以上面的集群网络保持一致
-  serviceSubnet: 10.1.0.0/24
 
-#### containerd容器安装
-# Cluster container-runtime supported: docker, containerd
+#### 容器引擎 安装
+# 支持的集群容器引擎: docker, containerd
 container_runtime: containerd
 # [.]启用容器仓库镜像
 enable_mirror_warehouse: true
@@ -45,8 +37,6 @@ sandbox_image: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
 # [containerd]容器持久化存储目录
 containerd_storage_dir: "/var/lib/containerd"
 containerd_state: "/run/containerd"
-
-
 
 #### 高可用设置
 # 高可用，如果部署单Master，该项忽略
@@ -72,7 +62,7 @@ have_network: yes
 # 是否修改 yum 源或 apt 源为阿里云，注意，会清空原有的源配置
 replace_repo: yes
 
-# 选择网络插件方案
+# 选择网络插件方案 方案一功能：网络插件选型，metrics_server安装 方案二功能：安装calico，coredns，ingress-nginx，dashboard
 addons_Option_I: yes
 addons_Option_II: no
 # 目前只支持addons_Option_I 配置
