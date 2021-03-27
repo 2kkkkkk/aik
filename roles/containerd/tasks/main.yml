@@ -19,14 +19,14 @@
   modprobe: name=overlay state=present
 
 - name: 分发并解压containerd二进制包
-  unarchive: src={{ item }} dest={{ tmp_dir }}
+  unarchive: src={{ item }} dest={{ tmp_dir }}/containerd
   with_fileglob:
     - "{{ software_dir }}/cri-containerd-cni-*.tar.gz"
   tags: upgrade
 
 - name: 移动containerd二进制文件
-  shell: cp -rf {{ tmp_dir }}/usr/local/bin/{containerd,containerd-shim,containerd-shim-runc-v1,containerd-shim-runc-v2,ctr,crictl} {{ containerd_work_dir }}/bin && \
-         cp -rf {{ tmp_dir }}/usr/local/sbin/runc {{ containerd_work_dir }}/bin
+  shell: cp -rf {{ tmp_dir }}/containerd/usr/local/bin/{containerd,containerd-shim,containerd-shim-runc-v1,containerd-shim-runc-v2,ctr,crictl} {{ containerd_work_dir }}/bin && \
+         cp -rf {{ tmp_dir }}/containerd/usr/local/sbin/runc {{ containerd_work_dir }}/bin
 
 
 - name: 创建 containerd 配置文件
