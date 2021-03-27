@@ -22,35 +22,29 @@
     - containerd
   tags: containerd
 
-- name: 3.部署critools
-  gather_facts: false
-  hosts: k8s
-  roles:
-    - critools
-  tags: critools
 
-- name: 4.部署ETCD集群
+- name: 3.部署ETCD集群
   gather_facts: false
   hosts: etcd
   roles:
     - etcd
   tags: etcd
 
-- name: 5.部署K8S Master
+- name: 4.部署K8S Master
   gather_facts: false
   hosts: master
   roles:
     - master
   tags: master
 
-- name: 6.部署K8S Node
+- name: 5.部署K8S Node
   gather_facts: false
   hosts: k8s
   roles:
     - node
   tags: node
 
-- name: 7.部署插件
+- name: 6.部署插件
   gather_facts: false
   hosts: master
   roles:

@@ -24,7 +24,7 @@ kubernetes:
 
 #### containerd容器安装
 # Cluster container-runtime supported: docker, containerd
-container: containerd
+container_runtime: containerd
 # [containerd]基础容器镜像
 # kubelet
 sandbox_image: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
