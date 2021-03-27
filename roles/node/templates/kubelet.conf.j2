@@ -8,7 +8,7 @@ KUBELET_OPTS="--logtostderr=false \
 --config={{ k8s_work_dir }}/cfg/kubelet-config.yml \
 --cert-dir={{ k8s_work_dir }}/ssl \
 {% if container_runtime == "containerd" %}
-  --container-runtime=remote \
-  --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
+--container-runtime=remote \
+--container-runtime-endpoint=unix:///run/containerd/containerd.sock \
 {% endif %}
 --pod-infra-container-image={{ sandbox_image }}"
