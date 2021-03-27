@@ -22,7 +22,6 @@
     - containerd
   tags: containerd
 
-
 - name: 3.部署ETCD集群
   gather_facts: false
   hosts: etcd
