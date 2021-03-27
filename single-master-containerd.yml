@@ -1,7 +1,9 @@
 ---
 - name: 0.系统初始化
   gather_facts: false
-  hosts: all 
+  hosts: 
+    - k8s
+    - etcd
   roles:
     - common
   tags: common 
@@ -13,42 +15,35 @@
     - tls
   tags: tls
 
-- name: 2.部署Nginx负载均衡并高可用
+- name: 2.部署containerd
   gather_facts: false
-  hosts: lb
+  hosts: k8s
   roles:
-    - nginx
-  tags: nginx
+    - containerd
+  tags: containerd
 
-- name: 3.部署Docker
-  gather_facts: false
-  hosts: k8s 
-  roles:
-    - docker 
-  tags: docker
-
-- name: 4.部署ETCD集群
+- name: 3.部署ETCD集群
   gather_facts: false
   hosts: etcd
   roles:
-    -  etcd
+    - etcd
   tags: etcd
 
-- name: 5.部署K8S Master
+- name: 4.部署K8S Master
   gather_facts: false
   hosts: master
   roles:
     - master
   tags: master
 
-- name: 6.部署K8S Node
+- name: 5.部署K8S Node
   gather_facts: false
-  hosts: k8s 
+  hosts: k8s
   roles:
     - node
   tags: node
 
-- name: 7.部署插件
+- name: 6.部署插件
   gather_facts: false
   hosts: master
   roles:

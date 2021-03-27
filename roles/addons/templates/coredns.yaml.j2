@@ -189,7 +189,7 @@ metadata:
 spec:
   selector:
     k8s-app: kube-dns
-  clusterIP: {{kubernetes.serviceSubnet | next_nth_usable(2)}}
+  clusterIP: {{ service_cidr | next_nth_usable(2)}}
   ports:
   - name: dns
     port: 53

@@ -1,11 +1,13 @@
 [Unit]
 Description=Kubernetes Kubelet
-After=docker.service
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After={{ container_runtime }}.service
 
 [Service]
 EnvironmentFile={{ k8s_work_dir }}/cfg/kubelet.conf
 ExecStart={{ k8s_work_dir }}/bin/kubelet $KUBELET_OPTS
-Restart=on-failure
+Restart=always
+RestartSec=5
 LimitNOFILE=65536
 
 [Install]

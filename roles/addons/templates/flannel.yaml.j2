@@ -125,7 +125,7 @@ data:
     }
   net-conf.json: |
     {
-      "Network": "{{ kubernetes.podSubnet }}",
+      "Network": "{{ pod_cidr }}",
       "Backend": {
         "Type": "{{ flannel.network_mode }}"
       }

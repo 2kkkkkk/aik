@@ -20,12 +20,12 @@
     - nginx
   tags: nginx
 
-- name: 3.部署Docker
+- name: 3.部署containerd
   gather_facts: false
-  hosts: k8s 
-  roles:
-    - docker 
-  tags: docker
+  hosts: k8s
+  roles: 
+    - containerd
+  tags: containerd 
 
 - name: 4.部署ETCD集群
   gather_facts: false

@@ -1,25 +1,42 @@
 #### kubernetes安装设置
 # kubernetes 下载服务器地址，默认的下载服务器比较慢，建议按照文档自建 暂不支持后续开放
-kube_down_url: http://www.2kk.com
+kube_down_url: http://172.16.163.109
 # 安装目录
 software_dir: '/root/binary_pkg'
 k8s_work_dir: '/opt/kubernetes'
 etcd_work_dir: '/opt/etcd'
+containerd_work_dir: "/opt/containerd"
 tmp_dir: '/tmp/k8s'
 # 集群网络
 service_cidr: '10.1.0.0/24' #集群Service网段
 cluster_dns: '10.1.0.2'   # 与roles/addons/files/coredns.yaml中IP一致，并且是service_cidr中的IP
-pod_cidr: '10.244.0.0/16' # 与roles/addons/files/kube-flannel.yaml中网段一致，集群Pod网段
+pod_cidr: '10.244.0.0/16' # 与roles/addons/files/calico.yaml中网段一致，集群Pod网段
 service_nodeport_range: '30000-32767'
 cluster_domain: 'cluster.local'
-# Kubernetes
-kubernetes:
-  # kubernetes 版本
-  version: v1.19.8
-  # 集群Pod网段 需以上面的集群网络保持一致
-  podSubnet: 10.244.0.0/16
-  # 集群Service网段 需以上面的集群网络保持一致
-  serviceSubnet: 10.1.0.0/24
+# kube-proxy的服务代理模式: 'iptables' or 'ipvs'
+proxy_mode: "ipvs"
+
+#### 容器引擎 安装
+# 支持的集群容器引擎: docker, containerd
+container_runtime: containerd
+# [.]启用容器仓库镜像
+enable_mirror_warehouse: true
+
+# ------------------------------------------- docker
+# [docker]容器存储目录
+docker_storage_dir: "/var/lib/docker"
+
+# [docker]信任的HTTP仓库
+mirror_warehouse: '["harbor.space.com"]'
+
+# ------------------------------------------- containerd
+# [containerd]基础容器镜像
+# kubelet
+sandbox_image: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
+
+# [containerd]容器持久化存储目录
+containerd_storage_dir: "/var/lib/containerd"
+containerd_state: "/run/containerd"
 
 #### 高可用设置
 # 高可用，如果部署单Master，该项忽略
@@ -45,7 +62,7 @@ have_network: yes
 # 是否修改 yum 源或 apt 源为阿里云，注意，会清空原有的源配置
 replace_repo: yes
 
-# 选择网络插件方案
+# 选择网络插件方案 方案一功能：网络插件选型，metrics_server安装 方案二功能：安装calico，coredns，ingress-nginx，dashboard
 addons_Option_I: yes
 addons_Option_II: no
 # 目前只支持addons_Option_I 配置
@@ -58,6 +75,7 @@ network_plugin: calico
 calico:
   version: v3.17.0
   network_mode: ipip
+  network_card: ens192
 
 flannel:
   version: v0.13.0

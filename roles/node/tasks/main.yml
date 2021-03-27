@@ -13,10 +13,13 @@
     - /opt/cni/bin
     - /etc/cni/net.d
 
+- name: 准备 cni配置文件
+  template: src=cni-default.conf.j2 dest=/etc/cni/net.d/10-default.conf
+
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
 
-- name: 分发并解压k8s二进制包
+- name: 分发并解压k8s二进制包（需要花费一些时间...）
   unarchive: src={{ item }} dest={{ tmp_dir }}
   with_fileglob:
     - "{{ software_dir }}/kubernetes-*.tar.gz"
@@ -47,28 +50,40 @@
     - kube-proxy-config.yml.j2
 
 - name: 分发service文件
-  template: src={{ item }} dest=/usr/lib/systemd/system/{{ item.split('.')[:-1]|join('.') }}
+  template: src={{ item }} dest=/etc/systemd/system/{{ item.split('.')[:-1]|join('.') }}
   with_items:
     - kubelet.service.j2
     - kube-proxy.service.j2
-    
+
 - name: 启动k8s node组件
   systemd: name={{ item }} state=restarted enabled=yes daemon_reload=yes
   with_items:
     - kubelet
     - kube-proxy
 
-- name: 允许Node加入集群
-  ignore_errors: yes
-  delegate_to: "{{ groups['master'][0] }}"
-  run_once: true
-  shell: kubectl certificate approve $(kubectl get csr |awk 'NR!=1{print $1}')
+# 轮询等待kubelet启动完成
+- name: 轮询等待kubelet启动
+  shell: "systemctl status kubelet.service|grep Active"
+  register: kubelet_status
+  until: '"running" in kubelet_status.stdout'
+  retries: 4
+  delay: 2
+  tags: reload-kube-proxy, upgrade_k8s, restart_node
 
-- name: 分发预准备镜像
+# 轮询等待kube-proxy启动完成
+- name: 轮询等待kube-proxy启动
+  shell: "systemctl status kube-proxy.service|grep Active"
+  register: kubeproxy_status
+  until: '"running" in kubeproxy_status.stdout'
+  retries: 4
+  delay: 2
+  tags: reload-kube-proxy, upgrade_k8s, restart_node
+
+- name: 分发预准备镜像（需要花费一些时间...）
   copy: src={{ software_dir }}/image.tar.gz dest={{ tmp_dir }}
   when: Offline_mirroring
-
-- name: 导入镜像
+  
+- name: 导入镜像（需要花费一些时间...）
   shell: cd {{ tmp_dir }} && \
          tar zxf image.tar.gz && \
          for image in $(ls *.tar);do docker load < $image;done

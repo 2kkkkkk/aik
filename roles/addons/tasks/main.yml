@@ -56,7 +56,7 @@
     - "*.yaml"
   when: addons_Option_II
 
-- name: 部署Flannel,Dashboard,CoreDNS,Ingress
+- name: 部署Calico,Dashboard,CoreDNS,Ingress
   ignore_errors: yes
   shell: |
          cd {{ tmp_dir }}
