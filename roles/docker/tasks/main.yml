@@ -43,7 +43,7 @@
 
 - name: 查看状态
   shell: docker info
-  register: docker 
+  register: docker
 - debug: var=docker.stdout_lines
 
 ## 可选 ------安装docker查询镜像 tag的小工具----
