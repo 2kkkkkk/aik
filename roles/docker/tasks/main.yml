@@ -19,13 +19,13 @@
   shell: cp -rf {{ tmp_dir }}/docker/* /usr/local/bin
 
 - name: 分发service文件
-  copy: src=docker.service.j2 dest=/etc/systemd/system/docker.service
+  template: src=docker.service.j2 dest=/etc/systemd/system/docker.service
 
 - name: 创建目录
   file: dest=/etc/docker state=directory
 
 - name: 配置docker
-  copy: src=daemon.json.j2 dest=/etc/docker/daemon.json
+  template: src=daemon.json.j2 dest=/etc/docker/daemon.json
 
 - name: 启动docker
   systemd: name=docker state=restarted enabled=yes daemon_reload=yes
