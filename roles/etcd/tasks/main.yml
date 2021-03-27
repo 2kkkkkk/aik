@@ -28,7 +28,7 @@
   template: src=etcd.conf.j2 dest={{ etcd_work_dir }}/cfg/etcd.conf
 
 - name: 分发service文件
-  template: src=etcd.service.j2 dest=/usr/lib/systemd/system/etcd.service
+  template: src=etcd.service.j2 dest=/etc/systemd/system/etcd.service
     
 - name: 启动etcd
   systemd: name=etcd state=restarted enabled=yes daemon_reload=yes

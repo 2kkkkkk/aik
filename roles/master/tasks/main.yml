@@ -56,7 +56,7 @@
     - kube-scheduler.kubeconfig.j2
 
 - name: 分发service文件
-  template: src={{ item }} dest=/usr/lib/systemd/system/{{ item.split('.')[:-1]|join('.') }}
+  template: src={{ item }} dest=/etc/systemd/system/{{ item.split('.')[:-1]|join('.') }}
   with_items:
     - kube-apiserver.service.j2
     - kube-controller-manager.service.j2

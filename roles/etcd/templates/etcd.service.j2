@@ -3,6 +3,7 @@ Description=Etcd Server
 After=network.target
 After=network-online.target
 Wants=network-online.target
+Documentation=https://github.com/coreos
 
 [Service]
 Type=notify
@@ -13,9 +14,15 @@ ExecStart={{ etcd_work_dir }}/bin/etcd \
         --peer-cert-file={{ etcd_work_dir }}/ssl/server.pem \
         --peer-key-file={{ etcd_work_dir }}/ssl/server-key.pem \
         --trusted-ca-file={{ etcd_work_dir }}/ssl/ca.pem \
-        --peer-trusted-ca-file={{ etcd_work_dir }}/ssl/ca.pem
-Restart=on-failure
+        --peer-trusted-ca-file={{ etcd_work_dir }}/ssl/ca.pem \
+        --auto-compaction-retention=1 \
+        --auto-compaction-mode=periodic \
+        --max-request-bytes=10485760 \
+        --quota-backend-bytes=8589934592
+Restart=always
+RestartSec=15
 LimitNOFILE=65536
+OOMScoreAdjust=-999
 
 [Install]
 WantedBy=multi-user.target

@@ -13,6 +13,9 @@
     - /opt/cni/bin
     - /etc/cni/net.d
 
+- name: 准备 cni配置文件
+  template: src=cni-default.conf.j2 dest=/etc/cni/net.d/10-default.conf
+
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
 
@@ -47,16 +50,34 @@
     - kube-proxy-config.yml.j2
 
 - name: 分发service文件
-  template: src={{ item }} dest=/usr/lib/systemd/system/{{ item.split('.')[:-1]|join('.') }}
+  template: src={{ item }} dest=/etc/systemd/system/{{ item.split('.')[:-1]|join('.') }}
   with_items:
     - kubelet.service.j2
     - kube-proxy.service.j2
-    
+
 - name: 启动k8s node组件
   systemd: name={{ item }} state=restarted enabled=yes daemon_reload=yes
   with_items:
     - kubelet
     - kube-proxy
+
+# 轮询等待kubelet启动完成
+- name: 轮询等待kubelet启动
+  shell: "systemctl status kubelet.service|grep Active"
+  register: kubelet_status
+  until: '"running" in kubelet_status.stdout'
+  retries: 4
+  delay: 2
+  tags: reload-kube-proxy, upgrade_k8s, restart_node
+
+# 轮询等待kube-proxy启动完成
+- name: 轮询等待kube-proxy启动
+  shell: "systemctl status kube-proxy.service|grep Active"
+  register: kubeproxy_status
+  until: '"running" in kubeproxy_status.stdout'
+  retries: 4
+  delay: 2
+  tags: reload-kube-proxy, upgrade_k8s, restart_node
 
 - name: 分发预准备镜像（需要花费一些时间...）
   copy: src={{ software_dir }}/image.tar.gz dest={{ tmp_dir }}

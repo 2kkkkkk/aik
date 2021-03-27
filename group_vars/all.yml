@@ -13,6 +13,8 @@ cluster_dns: '10.1.0.2'   # 与roles/addons/files/coredns.yaml中IP一致，并�
 pod_cidr: '10.244.0.0/16' # 与roles/addons/files/calico.yaml中网段一致，集群Pod网段
 service_nodeport_range: '30000-32767'
 cluster_domain: 'cluster.local'
+# Service proxy mode of kube-proxy: 'iptables' or 'ipvs'
+proxy_mode: "ipvs"
 # Kubernetes
 kubernetes:
   # kubernetes 版本
@@ -25,16 +27,26 @@ kubernetes:
 #### containerd容器安装
 # Cluster container-runtime supported: docker, containerd
 container_runtime: containerd
+# [.]启用容器仓库镜像
+enable_mirror_warehouse: true
+
+# ------------------------------------------- docker
+# [docker]容器存储目录
+docker_storage_dir: "/var/lib/docker"
+
+# [docker]信任的HTTP仓库
+mirror_warehouse: '["harbor.space.com"]'
+
+# ------------------------------------------- containerd
 # [containerd]基础容器镜像
 # kubelet
 sandbox_image: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
 
 # [containerd]容器持久化存储目录
-containerd_root: "/var/lib/containerd"
+containerd_storage_dir: "/var/lib/containerd"
 containerd_state: "/run/containerd"
 
-# [.]启用容器仓库镜像
-enable_mirror_warehouse: true
+
 
 #### 高可用设置
 # 高可用，如果部署单Master，该项忽略

@@ -1,4 +1,12 @@
 ---
+- name: 获取是否已经安装docker
+  shell: 'systemctl status docker|grep Active || echo "NoFound"'
+  register: docker_svc
+
+- name: 获取是否已经安装containerd
+  shell: 'systemctl status containerd|grep Active || echo "NoFound"'
+  register: containerd_svc
+
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
 
@@ -8,16 +16,16 @@
     - "{{ software_dir }}/docker-*.tgz"
 
 - name: 移动docker二进制文件
-  shell: cp -rf {{ tmp_dir }}/docker/* /usr/bin
+  shell: cp -rf {{ tmp_dir }}/docker/* /usr/local/bin
 
 - name: 分发service文件
-  copy: src=docker.service dest=/usr/lib/systemd/system/
+  copy: src=docker.service dest=/etc/systemd/system/
 
 - name: 创建目录
   file: dest=/etc/docker state=directory
 
 - name: 配置docker
-  copy: src=daemon.json dest=/etc/docker/daemon.json
+  copy: src=daemon.json.j2.j2 dest=/etc/docker/daemon.json.j2
 
 - name: 启动docker
   systemd: name=docker state=restarted enabled=yes daemon_reload=yes
