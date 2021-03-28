@@ -36,6 +36,8 @@
   copy: src=check_nginx.sh dest=/etc/keepalived/ mode=u+x
   when: Offline_installation
 
+- name: 删除conf.d目录下的文件,避免部署ingress时端口占用
+  shell: rm -f /etc/nginx/conf.d/default.conf
 
 - name: 启动服务
   systemd: name={{ item }} state=restarted enabled=yes daemon_reload=yes
