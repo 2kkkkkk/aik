@@ -79,6 +79,34 @@
   delay: 2
   tags: reload-kube-proxy, upgrade_k8s, restart_node
 
+
+- name: "为master节点打污点"
+  ignore_errors: true
+  shell: "kubectl taint nodes {{ inventory_hostname }} node-role.kubernetes.io/master=:NoSchedule"
+  delegate_to: "{{ groups['master'][0] }}"
+  run_once: true
+  with_items:
+    - "{{ groups['master'] }}"
+  tags: create_label
+
+- name: "为master节点打标签"
+  ignore_errors: true
+  shell: "kubectl label nodes {{ inventory_hostname }} node-role.kubernetes.io/master= --overwrite"
+  delegate_to: "{{ groups['master'][0] }}"
+  run_once: true
+  with_items:
+    - "{{ groups['master'] }}"
+  tags: create_label
+
+- name: "为node节点打标签"
+  ignore_errors: true
+  shell: "kubectl label nodes {{ inventory_hostname }} node-role.kubernetes.io/node= --overwrite"
+  delegate_to: "{{ groups['master'][0] }}"
+  run_once: true
+  with_items:
+    - "{{ groups['node'] }}"
+  tags: create_label
+
 - name: 分发预准备镜像（需要花费一些时间...）
   copy: src={{ software_dir }}/image.tar.gz dest={{ tmp_dir }}
   when: Offline_mirroring
