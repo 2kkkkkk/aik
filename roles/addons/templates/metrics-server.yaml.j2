@@ -108,7 +108,6 @@ spec:
       labels:
         app: metrics-server
     spec:
-      hostNetwork: true
       serviceAccountName: metrics-server
       volumes:
       # mount in tmp so we can safely use from-scratch images and/or read-only containers
