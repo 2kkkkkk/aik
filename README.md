@@ -55,7 +55,7 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 
 下载准备好软件包并解压/root目录：
 
-链接: https://pan.baidu.com/s/1U-566cbdqXGOP7JEkB5Y1g
+链接: 链接：https://pan.baidu.com/s/1kkPAR0xFztB2yepe4t7yRg
 
 提取码: 2kkk
 
