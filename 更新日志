@@ -11,6 +11,8 @@
 Metrics Server 无法访问 Apiserver 问题  已修复
 修复master模块报错 多次执行 已修复
 插件报错Dashboard   已修复
+自动化安装 containerd和crictl 已完成
+增加ipvs和iptables模式的选择 已完成
 
 修复bug：
 1、修复master模块报错      2021-3-6
@@ -30,10 +32,14 @@ TASK [addons : 创建Dashboard管理员令牌
 2、修改证书生成脚本  已完成
 2、apiserver打开API 聚合，需修改api-server.conf配置文件 已完成
 
+4、修复复用master节点上搭建nginxha 导致无法部署ingress的问题
+
 未完成：
 HA_nginx yum 安装nginx 配置文件报错  第13行
 优化网络方案2yaml
-自动化安装 containerd  未完成
-自动化安装 critools  未完成
 自动打污点
 自动打标签
+
+现在可能存在的bug
+需要给calico指定网卡 增加 network_card: ens192 变量
+metrics-server 需要重新部署
