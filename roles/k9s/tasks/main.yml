@@ -1,5 +1,4 @@
 ---
-
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
   when: k9s_install
