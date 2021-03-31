@@ -1,4 +1,6 @@
-#### kubernetes安装设置
+############################
+# #### kubernetes安装设置
+############################
 # kubernetes 下载服务器地址，默认的下载服务器比较慢，建议按照文档自建 暂不支持后续开放
 kube_down_url: http://172.16.163.109
 # 安装目录
@@ -16,7 +18,9 @@ cluster_domain: 'cluster.local'
 # kube-proxy的服务代理模式: 'iptables' or 'ipvs'
 proxy_mode: "ipvs"
 
-#### 容器引擎 安装
+############################
+# #### 容器引擎 安装
+############################
 # 支持的集群容器引擎: docker, containerd
 container_runtime: containerd
 # [.]启用容器仓库镜像
@@ -38,7 +42,9 @@ sandbox_image: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
 containerd_storage_dir: "/var/lib/containerd"
 containerd_state: "/run/containerd"
 
-#### 高可用设置
+############################
+# #### 高可用 安装
+############################
 # 高可用，如果部署单Master，该项忽略
 vip: '172.16.163.110'
 nic: 'ens192'
@@ -52,16 +58,24 @@ Online_installation: no
 # 是否离线安装addons yes会导入镜像 no 会从网络上下载镜像
 Offline_mirroring: no
 
-#### 安装设置
+############################
+# #### 安全设置
+############################
 # 是否修改sshd,生产环境开启此项测试环境关闭m,一部分安全设置禁止root直接登陆之类的
 replace_sshd: no
-### 网络设置
+
+############################
+# #### 网络设置
+############################
 # 是否可以连接到 internet，如果可以，则会自动装 ntpdate 等工具，该字段暂时只有控制联网安装一些软件的功能，主要预留为后续离线部署开关
 have_network: yes
 # 两个都要yes才可以使用yum安装工具
 # 是否修改 yum 源或 apt 源为阿里云，注意，会清空原有的源配置
 replace_repo: yes
 
+############################
+# #### 网络插件 安装
+############################
 # 选择网络插件方案 方案一功能：网络插件选型，metrics_server安装 方案二功能：安装calico，coredns，ingress-nginx，dashboard
 addons_Option_I: yes
 addons_Option_II: no
@@ -93,6 +107,9 @@ coredns:
 metrics_server:
   version: v0.4.1
 
+############################
+# #### 自签证书
+############################
 # 自签证书可信任IP列表，为方便扩展，可添加多个预留IP
 cert_hosts:
   # 包含所有LB、VIP、Master IP和service_cidr的第一个IP
@@ -107,3 +124,20 @@ cert_hosts:
     - 172.16.163.111
     - 172.16.163.112
     - 172.16.163.113
+
+############################
+# harbor
+############################
+# harbor version，完整版本号
+HARBOR_VER: "__harbor__"
+HARBOR_DOMAIN: "harbor.yourdomain.com"
+HARBOR_TLS_PORT: 8443
+
+# if set 'false', you need to put certs named harbor.pem and harbor-key.pem in directory 'down'
+HARBOR_SELF_SIGNED_CERT: true
+
+# install extra component
+HARBOR_WITH_NOTARY: false
+HARBOR_WITH_TRIVY: false
+HARBOR_WITH_CLAIR: false
+HARBOR_WITH_CHARTMUSEUM: true
