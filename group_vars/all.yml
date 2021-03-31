@@ -58,15 +58,15 @@ proxy_master_port: '7443'
 # 离线安装  nginx HA
 Offline_installation: true
 # 在线安装 目前报错不可用
-Online_installation: flase
+Online_installation: false
 # 是否离线安装addons true会导入镜像 no 会从网络上下载镜像
-Offline_mirroring: flase
+Offline_mirroring: false
 
 ############################
 # #### 安全设置
 ############################
 # 是否修改sshd,生产环境开启此项测试环境关闭m,一部分安全设置禁止root直接登陆之类的
-replace_sshd: flase
+replace_sshd: false
 
 ############################
 # #### 网络设置
@@ -82,7 +82,7 @@ replace_repo: true
 ############################
 # 选择网络插件方案 方案一功能：网络插件选型，metrics_server安装 方案二功能：安装calico，coredns，ingress-nginx，dashboard
 addons_Option_I: true
-addons_Option_II: flase
+addons_Option_II: false
 # 目前只支持addons_Option_I 配置
 # Network Plugin
 # 选择你要部署的网络组件 
