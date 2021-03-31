@@ -21,7 +21,7 @@ proxy_mode: "ipvs"
 ############################
 # #### k9s 安装 [用K9s - Kubernetes CLI管理K8s集群]
 ############################
-k9s_install: yes
+k9s_install: true
 ############################
 # #### 容器引擎 安装
 ############################
@@ -56,33 +56,33 @@ nic: 'ens192'
 proxy_master_port: '7443'
 # 安装方式二选一,必须关一个
 # 离线安装  nginx HA
-Offline_installation: yes
+Offline_installation: true
 # 在线安装 目前报错不可用
-Online_installation: no
-# 是否离线安装addons yes会导入镜像 no 会从网络上下载镜像
-Offline_mirroring: no
+Online_installation: flase
+# 是否离线安装addons true会导入镜像 no 会从网络上下载镜像
+Offline_mirroring: flase
 
 ############################
 # #### 安全设置
 ############################
 # 是否修改sshd,生产环境开启此项测试环境关闭m,一部分安全设置禁止root直接登陆之类的
-replace_sshd: no
+replace_sshd: flase
 
 ############################
 # #### 网络设置
 ############################
 # 是否可以连接到 internet，如果可以，则会自动装 ntpdate 等工具，该字段暂时只有控制联网安装一些软件的功能，主要预留为后续离线部署开关
-have_network: yes
-# 两个都要yes才可以使用yum安装工具
+have_network: true
+# 两个都要true才可以使用yum安装工具
 # 是否修改 yum 源或 apt 源为阿里云，注意，会清空原有的源配置
-replace_repo: yes
+replace_repo: true
 
 ############################
 # #### 网络插件 安装 [flannel,calico,cilium]
 ############################
 # 选择网络插件方案 方案一功能：网络插件选型，metrics_server安装 方案二功能：安装calico，coredns，ingress-nginx，dashboard
-addons_Option_I: yes
-addons_Option_II: no
+addons_Option_I: true
+addons_Option_II: flase
 # 目前只支持addons_Option_I 配置
 # Network Plugin
 # 选择你要部署的网络组件 

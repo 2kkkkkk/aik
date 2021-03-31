@@ -1,8 +1,4 @@
 ---
-- name: 获取是否已经安装k9s
-  shell: 'ls /usr/local/bin/ | grep k9s'
-  register: k9s_svc
-  when: k9s_install
 
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
