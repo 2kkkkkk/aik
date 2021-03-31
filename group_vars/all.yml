@@ -19,6 +19,10 @@ cluster_domain: 'cluster.local'
 proxy_mode: "ipvs"
 
 ############################
+# #### k9s 安装 [用K9s - Kubernetes CLI管理K8s集群]
+############################
+k9s_install: yes
+############################
 # #### 容器引擎 安装
 ############################
 # 支持的集群容器引擎: docker, containerd
@@ -74,7 +78,7 @@ have_network: yes
 replace_repo: yes
 
 ############################
-# #### 网络插件 安装
+# #### 网络插件 安装 [flannel,calico,cilium]
 ############################
 # 选择网络插件方案 方案一功能：网络插件选型，metrics_server安装 方案二功能：安装calico，coredns，ingress-nginx，dashboard
 addons_Option_I: yes
