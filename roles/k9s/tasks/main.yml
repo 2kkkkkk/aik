@@ -16,5 +16,5 @@
 
 - name: 移动k9s二进制文件
   shell: cp -f {{ tmp_dir }}/k9s /usr/local/bin
-  when: '"" in k9s_svc.stdout' and k9s_install
+  when: k9s_install
 
