@@ -1,6 +1,6 @@
 - name: 创建数据目录
   file:
-    path: { { harbor_data } }
+    path: {{ harbor_data }}
     state: directory
     mode: 0755
 
@@ -91,7 +91,7 @@
 - name: 准备harbor数据目录
   file: dest={{ item }} state=directory
   with_items:
-    - { { harbor_data } }
+    - {{ harbor_data }}
 
 - name: 准备 harbor 配置文件
   template: src=harbor-{{ HARBOR_VER_MAIN }}.yml.j2 dest={{ harbor_work_dir }}/harbor/harbor.yml
