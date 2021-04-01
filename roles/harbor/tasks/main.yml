@@ -45,8 +45,8 @@
 
 - name: 下发 harbor 离线安装包
   copy:
-  src: "{{ software_dir }}/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
-  dest: "{{ harbor_work_dir }}/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
+    src: "{{ software_dir }}/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
+    dest: "{{ harbor_work_dir }}/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
 
 - name: 解压 harbor 离线安装包
   shell: "cd {{ harbor_work_dir }} && tar zxf harbor-offline-installer-{{ HARBOR_VER }}.tgz"
