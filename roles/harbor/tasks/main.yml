@@ -58,7 +58,7 @@
     - ssl
 
 - name: 准备cfssl工具
-    unarchive: src={{ software_dir }}/cfssl.tar.gz dest=/usr/bin/ mode=u+x
+  unarchive: src={{ software_dir }}/cfssl.tar.gz dest=/usr/bin/ mode=u+x
 
 - name: 准备harbor证书请求文件
   template: src={{ item }} dest={{ root_dir.stdout }}/ssl/harbor/{{ item.split('.')[:-1]|join('.') }}
