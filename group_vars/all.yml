@@ -133,11 +133,15 @@ cert_hosts:
 # harbor
 ############################
 # harbor version，完整版本号
-HARBOR_VER: "__harbor__"
+HARBOR_VER: "v2.1.4"
 HARBOR_DOMAIN: "harbor.yourdomain.com"
-HARBOR_TLS_PORT: 8443
 
-# if set 'false', you need to put certs named harbor.pem and harbor-key.pem in directory 'down'
+harbor_tls_port: 8443
+#harbor安装目录
+harbor_work_dir: '/data'
+#harbor数据目录
+harbor_data: '/data/harbor/data'
+# 如果设置为'false'，则需要将名为Harbor.pem和Harbor-key.pem的证书放入目录'down'中
 HARBOR_SELF_SIGNED_CERT: true
 
 # install extra component

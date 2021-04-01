@@ -1,13 +1,27 @@
-- name: 创建 /var/data 目录
+- name: 创建数据目录
   file:
-    path: /var/data
+    path: { { harbor_data } }
     state: directory
     mode: 0755
 
-# 注册变量 result，如果 /var/data 目录下存在 registry 目录说明已经安装过 harbor，则不进行安装
+# 注册变量 result，如果 数据目录下存在 registry 目录说明已经安装过 harbor，则不进行安装
 - name: 注册变量 result
-  command: ls /var/data
+  command: ls {{ harbor_data }}
   register: result
+
+- name: 获取Ansible工作目录
+  shell: pwd |sed 's#roles/tls##'
+  register: root_dir
+
+- name: 创建证书工作目录
+  file: dest={{ root_dir.stdout }}/ssl/{{ item }} state=directory
+  with_items:
+    - harbor
+
+- name: 准备harbor工作目录
+  file: dest={{ item }} state=directory
+  with_items:
+  - {{ harbor_work_dir }}
 
 - block:
   - name: 生成 harbor 随机密码
@@ -23,52 +37,63 @@
   - debug: var="db_password_gen.stdout"
   
   - name: 下发 docker compose 二进制文件
-    copy: src={{ base_dir }}/bin/docker-compose dest={{ bin_dir }}/docker-compose mode=0755
+    copy: src={{ software_dir }}/docker-compose dest=/usr/local/bin/docker-compose mode=0755
 
   - name: 下发 harbor 离线安装包
     copy:
-      src: "{{ base_dir }}/down/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
-      dest: "/var/data/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
+      src: "{{ software_dir }}/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
+      dest: "{{ harbor_work_dir }}/harbor-offline-installer-{{ HARBOR_VER }}.tgz"
 
   - name: 解压 harbor 离线安装包
-    shell: "cd /var/data && tar zxf harbor-offline-installer-{{ HARBOR_VER }}.tgz"
+    shell: "cd {{ harbor_work_dir }} && tar zxf harbor-offline-installer-{{ HARBOR_VER }}.tgz"
 
-  - name: 导入 harbor 所需 docker images
-    shell: "{{ bin_dir }}/docker load -i /var/data/harbor/harbor.{{ HARBOR_VER }}.tar.gz"
-  
-  - block:
-    - name: 创建 harbor 证书请求
-      template: src=harbor-csr.json.j2 dest={{ cluster_dir }}/ssl/harbor-csr.json
-      connection: local
-    
-    - name: 创建 harbor 证书和私钥
-      shell: "cd {{ cluster_dir }}/ssl && {{ base_dir }}/bin/cfssl gencert \
-            -ca=ca.pem \
-            -ca-key=ca-key.pem \
-            -config=ca-config.json \
-            -profile=kubernetes harbor-csr.json|{{ base_dir }}/bin/cfssljson -bare harbor"
-      connection: local
-    
-    - name: 分发自签名证书
-      copy: src={{ cluster_dir }}/ssl/{{ item }} dest={{ ca_dir }}/{{ item }}
+
+  - name: 准备harbor证书目录
+      file: dest={{ harbor_work_dir }}/{{ item }} state=directory
       with_items:
-      - ca.pem
-      - harbor.pem
-      - harbor-key.pem
-    when: 'HARBOR_SELF_SIGNED_CERT|bool'
+        - ssl
+        -
+  - name: 准备cfssl工具
+      unarchive: src={{ software_dir }}/cfssl.tar.gz dest=/usr/bin/ mode=u+x
 
-  - name: 推送非自签名证书（需提前在{{ base_dir }}/down/ 下载好证书）
-    copy: src={{ base_dir }}/down/{{ item }} dest={{ ca_dir }}/{{ item }}
+  - name: 准备harbor证书请求文件
+      template: src={{ item }} dest={{ root_dir.stdout }}/ssl/harbor/{{ item.split('.')[:-1]|join('.') }}
+      with_items:
+        - ca-config.json.j2
+        - ca-csr.json.j2
+        - harbor-csr.json.j2
+
+  - name: 准备生成harbor证书脚本
+      copy: src=generate_harbor_cert.sh dest={{ root_dir.stdout }}/ssl/harbor mode=u+x
+
+  - name: 生成harbor证书
+      shell: cd {{ root_dir.stdout }}/ssl/harbor && /bin/bash generate_harbor_cert.sh
+
+  - name: 分发自签名证书
+      copy: src=harbor_cert/{{ item }} dest={{ harbor_work_dir }}/ssl
+      with_items:
+        - ca.pem
+        - harbor.pem
+        - harbor-key.pem
+      when: 'HARBOR_SELF_SIGNED_CERT|bool'
+
+  - name: 推送非自签名证书（需提前在{{ software_dir }}/down/ 下载好证书）
+    copy: src={{ software_dir }}/down/{{ item }} dest={{ harbor_work_dir }}/ssl/{{ item }}
     with_items: 
     - harbor.pem
     - harbor-key.pem  
     when: 'not HARBOR_SELF_SIGNED_CERT|bool'
-  
+
+  - name: 准备harbor数据目录
+    file: dest={{ item }} state=directory
+    with_items:
+      - { { harbor_data } }
+
   - name: 准备 harbor 配置文件
-    template: src=harbor-{{ HARBOR_VER_MAIN }}.yml.j2 dest=/var/data/harbor/harbor.yml
+    template: src=harbor-{{ HARBOR_VER_MAIN }}.yml.j2 dest={{ harbor_work_dir }}/harbor/harbor.yml
 
     #- name: 配置 harbor.yml 文件
-    #template: src=harbor-{{ HARBOR_VER_MAIN }}.yml.j2 dest=/var/data/harbor/harbor.yml
+    #template: src=harbor-{{ HARBOR_VER_MAIN }}.yml.j2 dest={{ harbor_work_dir }}/harbor/harbor.yml
     #when: HARBOR_VER_MAIN in ["v1.8", "v1.9", "v1.10"]
 
   - set_fact: HARBOR_INST_OPS="{{ HARBOR_INST_OPS }} --with-chartmuseum"
@@ -86,7 +111,7 @@
   - debug: var="HARBOR_INST_OPS"
 
   - name: 安装 harbor
-    shell: "cd /var/data/harbor && \
+    shell: "cd {{ harbor_work_dir }}/harbor && \
             export PATH={{ bin_dir }}:$PATH && \
-            ./install.sh {{ HARBOR_INST_OPS }} >> /tmp/harbor-`date +'%Y%m%d%H%M%S'`.log 2>&1"
+            ./install.sh {{ HARBOR_INST_OPS }} >> {{ harbor_work_dir }}/harbor/harbor-`date +'%Y%m%d%H%M%S'`.log 2>&1"
   when: '"registry" not in result.stdout'

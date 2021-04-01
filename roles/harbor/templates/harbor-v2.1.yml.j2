@@ -3,9 +3,9 @@ hostname: {{ HARBOR_HOSTNAME }}
 
 # https related config
 https:
-  port: {{ HARBOR_TLS_PORT }}
-  certificate: {{ ca_dir }}/harbor.pem
-  private_key: {{ ca_dir }}/harbor-key.pem
+  port: {{ harbor_tls_port }}
+  certificate: {{ harbor_work_dir }}/ssl/harbor.pem
+  private_key: {{{ harbor_work_dir }}/ssl/harbor-key.pem
 
 # Uncomment external_url if you want to enable external proxy
 # And when it enabled the hostname will no longer used
@@ -27,7 +27,7 @@ database:
   max_open_conns: 1000
 
 # The default data volume
-data_volume: /var/data
+data_volume: {{ harbor_data }}
 
 # Clair configuration
 clair:
