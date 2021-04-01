@@ -1,0 +1,9 @@
+---
+- name: 1.安装harbor
+  gather_facts: false
+  hosts: 
+    - harbor
+  roles:
+    - harbor
+  tags: harbor
+

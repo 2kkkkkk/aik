@@ -27,10 +27,9 @@
 172.16.163.112
 172.16.163.113
 
-# [可选] harbor 仓库, docker私人仓库
-# 'NEW_INSTALL': 'true' 安装一个docker仓库; 'false' 不安装
+#harbor 仓库, docker私人仓库
 [harbor]
-#192.168.1.8 NEW_INSTALL=false
+#172.16.163.43 hostname=harbor
 
 [k8s:children]
 master
