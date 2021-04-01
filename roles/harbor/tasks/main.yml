@@ -1,12 +1,12 @@
 - name: 创建数据目录
   file:
-    path: {{ harbor_data }}
+    path: "{{ harbor_data }}"
     state: directory
     mode: 0755
 
 # 注册变量 result，如果 数据目录下存在 registry 目录说明已经安装过 harbor，则不进行安装
 - name: 注册变量 result
-  command: ls {{ harbor_data }}
+  command: ls "{{ harbor_data }}"
   register: result
 
 - name: "修改主机名"
@@ -26,7 +26,7 @@
 - name: 准备harbor工作目录
   file: dest={{ item }} state=directory
   with_items:
-    - {{ harbor_work_dir }}
+    - "{{ harbor_work_dir }}"
 
 - name: 生成 harbor 随机密码
   shell: < /dev/urandom tr -dc 0-9A-Za-z-_ | head -c 16
@@ -91,7 +91,7 @@
 - name: 准备harbor数据目录
   file: dest={{ item }} state=directory
   with_items:
-    - {{ harbor_data }}
+    - "{{ harbor_data }}"
 
 - name: 准备 harbor 配置文件
   template: src=harbor-{{ HARBOR_VER_MAIN }}.yml.j2 dest={{ harbor_work_dir }}/harbor/harbor.yml
