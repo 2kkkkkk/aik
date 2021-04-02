@@ -4,7 +4,7 @@
   hosts: 
     - harbor
   roles:
-    - harbor
     - docker
+    - harbor
   tags: harbor
 
