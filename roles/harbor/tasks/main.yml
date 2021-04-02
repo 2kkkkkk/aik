@@ -15,7 +15,7 @@
   tags: hostname
 
 - name: 获取Ansible工作目录
-  shell: pwd |sed 's#roles/tls##'
+  shell: pwd |sed 's#roles/harbor##'
   register: root_dir
 
 - name: 创建证书工作目录
