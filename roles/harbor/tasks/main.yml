@@ -17,7 +17,7 @@
 - name: 准备harbor工作目录
   file: dest={{ item }} state=directory
   with_items:
-    - {{ harbor_work_dir }}
+    - "{{ harbor_work_dir }}"
 
 - name: 生成 harbor 随机密码
   shell: < /dev/urandom tr -dc 0-9A-Za-z-_ | head -c 16
