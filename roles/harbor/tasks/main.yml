@@ -83,5 +83,5 @@
 
 - name: 安装 harbor
   shell: "cd {{ harbor_work_dir }}/harbor && \
-        ./install.sh {{ HARBOR_INST_OPS }} >> {{ harbor_work_dir }}/harbor/harbor-`date +'%Y%m%d%H%M%S'`.log 2>&1"
+        ./install.sh  >> {{ harbor_work_dir }}/harbor/harbor-`date +'%Y%m%d%H%M%S'`.log 2>&1"
   when: '"registry" not in result.stdout'
