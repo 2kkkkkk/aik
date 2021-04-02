@@ -51,7 +51,7 @@
     - ssl
 
 - name: 准备harbor证书请求文件
-  template: src={{ item }} dest={{ harbor_work_dir }}/harbor/ssl/
+  template: src={{ item }} dest={{ harbor_work_dir }}/harbor/ssl/{{ item.split('.')[:-1]|join('.') }}
   with_items:
     - ca-config.json.j2
     - ca-csr.json.j2
