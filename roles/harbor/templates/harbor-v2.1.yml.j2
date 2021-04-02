@@ -4,8 +4,8 @@ hostname: {{ HARBOR_HOSTNAME }}
 # https related config
 https:
   port: {{ harbor_tls_port }}
-  certificate: {{ harbor_work_dir }}/ssl/harbor.pem
-  private_key: {{{ harbor_work_dir }}/ssl/harbor-key.pem
+  certificate: {{ harbor_work_dir }}/harbor/ssl/harbor.pem
+  private_key: {{{ harbor_work_dir }}/harbor/ssl/harbor-key.pem
 
 # Uncomment external_url if you want to enable external proxy
 # And when it enabled the hostname will no longer used

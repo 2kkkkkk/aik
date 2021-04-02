@@ -51,7 +51,7 @@
     - ssl
 
 - name: 准备harbor证书请求文件
-  template: src={{ item }} dest={{ harbor_work_dir }}/harbor/ssl/{{ item.split('.')[:-1]|join('.') }}
+  template: src={{ item }} dest={{ harbor_work_dir }}/ssl/{{ item.split('.')[:-1]|join('.') }}
   with_items:
     - ca-config.json.j2
     - ca-csr.json.j2
@@ -59,10 +59,18 @@
   when: harbor_self_signed_cert == true
 
 - name: 准备生成harbor证书脚本
-  copy: src=generate_harbor_cert.sh dest={{ harbor_work_dir }}/harbor/ssl/ mode=u+x
+  copy: src=generate_harbor_cert.sh dest={{ harbor_work_dir }}/ssl/ mode=u+x
 
 - name: 生成harbor证书
-  shell: cd {{ harbor_work_dir }}/harbor/ssl/ && /bin/bash generate_harbor_cert.sh
+  shell: cd {{ harbor_work_dir }}/ssl/ && /bin/bash generate_harbor_cert.sh
+  when: harbor_self_signed_cert == true
+
+- name: 分发自签名证书
+    copy: src={{ harbor_work_dir }}/ssl/{{ item }} dest={{ harbor_work_dir }}/harbor/ssl/{{ item }}
+    with_items:
+    - ca.pem
+    - harbor.pem
+    - harbor-key.pem
   when: harbor_self_signed_cert == true
 
 - name: 推送非自签名证书（需提前在{{ software_dir }} 下载好证书）
