@@ -46,7 +46,7 @@
   unarchive: src={{ software_dir }}/cfssl.tar.gz dest=/usr/bin/ mode=u+x
 
 - name: 准备harbor证书目录
-  file: dest={{ harbor_work_dir }}/{{ item }} state=directory
+  file: dest={{ harbor_work_dir }}/harbor/{{ item }} state=directory
   with_items:
     - ssl
 
