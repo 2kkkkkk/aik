@@ -66,8 +66,8 @@
   when: harbor_self_signed_cert == true
 
 - name: 分发自签名证书
-    copy: src={{ harbor_work_dir }}/ssl/{{ item }} dest={{ harbor_work_dir }}/harbor/ssl/{{ item }}
-    with_items:
+  copy: src={{ harbor_work_dir }}/ssl/{{ item }} dest={{ harbor_work_dir }}/harbor/ssl/{{ item }}
+  with_items:
     - ca.pem
     - harbor.pem
     - harbor-key.pem
