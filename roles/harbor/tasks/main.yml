@@ -14,19 +14,10 @@
     name: "{{ hostname|quote }}"
   tags: hostname
 
-- name: 获取Ansible工作目录
-  shell: pwd |sed 's#roles/harbor##'
-  register: root_dir
-
-- name: 创建证书工作目录
-  file: dest={{ root_dir.stdout }}/ssl/{{ item }} state=directory
-  with_items:
-    - harbor
-
 - name: 准备harbor工作目录
   file: dest={{ item }} state=directory
   with_items:
-    - "{{ harbor_work_dir }}"
+    - {{ harbor_work_dir }}
 
 - name: 生成 harbor 随机密码
   shell: < /dev/urandom tr -dc 0-9A-Za-z-_ | head -c 16
@@ -51,38 +42,31 @@
 - name: 解压 harbor 离线安装包
   shell: "cd {{ harbor_work_dir }} && tar zxf harbor-offline-installer-{{ HARBOR_VER }}.tgz"
 
-
-- name: 准备harbor证书目录
-  file: dest={{ root_dir.stdout }}/ssl/{{ item }} state=directory
-  with_items:
-    - harbor
-
 - name: 准备cfssl工具
   unarchive: src={{ software_dir }}/cfssl.tar.gz dest=/usr/bin/ mode=u+x
 
+- name: 准备harbor证书目录
+  file: dest={{ harbor_work_dir }}/{{ item }} state=directory
+  with_items:
+    - ssl
+
 - name: 准备harbor证书请求文件
-  template: src={{ item }} dest={{ root_dir.stdout }}/ssl/harbor{{ item.split('.')[:-1]|join('.') }}
+  template: src={{ item }} dest={{ harbor_work_dir }}/harbor/ssl/
   with_items:
     - ca-config.json.j2
     - ca-csr.json.j2
     - harbor-csr.json.j2
-
-- name: 准备生成harbor证书脚本
-  copy: src=generate_harbor_cert.sh dest={{ root_dir.stdout }}/ssl/ mode=u+x
-
-- name: 生成harbor证书
-  shell: cd {{ root_dir.stdout }}/ssl/harbor && /bin/bash generate_harbor_cert.sh
-
-- name: 分发自签名证书
-  copy: src=harbor_cert/{{ item }} dest={{ harbor_work_dir }}/harbor/ssl
-  with_items:
-    - ca.pem
-    - harbor.pem
-    - harbor-key.pem
   when: harbor_self_signed_cert == true
 
-- name: 推送非自签名证书（需提前在{{ software_dir }}/down/ 下载好证书）
-  copy: src={{ software_dir }}/down/{{ item }} dest={{ harbor_work_dir }}/ssl/{{ item }}
+- name: 准备生成harbor证书脚本
+  copy: src=generate_harbor_cert.sh dest={{ harbor_work_dir }}/harbor/ssl/ mode=u+x
+
+- name: 生成harbor证书
+  shell: cd {{ harbor_work_dir }}/harbor/ssl/ && /bin/bash generate_harbor_cert.sh
+  when: harbor_self_signed_cert == true
+
+- name: 推送非自签名证书（需提前在{{ software_dir }} 下载好证书）
+  copy: src={{ software_dir }}{{ item }} dest={{ harbor_work_dir }}/harbor/ssl/{{ item }}
   with_items:
     - harbor.pem
     - harbor-key.pem
