@@ -5,7 +5,7 @@ hostname: {{ HARBOR_HOSTNAME }}
 https:
   port: {{ harbor_tls_port }}
   certificate: {{ harbor_work_dir }}/harbor/ssl/harbor.pem
-  private_key: {{{ harbor_work_dir }}/harbor/ssl/harbor-key.pem
+  private_key: {{ harbor_work_dir }}/harbor/ssl/harbor-key.pem
 
 # Uncomment external_url if you want to enable external proxy
 # And when it enabled the hostname will no longer used
