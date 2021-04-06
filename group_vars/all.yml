@@ -1,4 +1,6 @@
-#### kubernetes安装设置
+############################
+# #### kubernetes安装设置
+############################
 # kubernetes 下载服务器地址，默认的下载服务器比较慢，建议按照文档自建 暂不支持后续开放
 kube_down_url: http://172.16.163.109
 # 安装目录
@@ -16,7 +18,13 @@ cluster_domain: 'cluster.local'
 # kube-proxy的服务代理模式: 'iptables' or 'ipvs'
 proxy_mode: "ipvs"
 
-#### 容器引擎 安装
+############################
+# #### k9s 安装 [用K9s - Kubernetes CLI管理K8s集群]
+############################
+k9s_install: true
+############################
+# #### 容器引擎 安装
+############################
 # 支持的集群容器引擎: docker, containerd
 container_runtime: containerd
 # [.]启用容器仓库镜像
@@ -38,7 +46,9 @@ sandbox_image: "registry.cn-shenzhen.aliyuncs.com/2kk/pause-amd64:3.2"
 containerd_storage_dir: "/var/lib/containerd"
 containerd_state: "/run/containerd"
 
-#### 高可用设置
+############################
+# #### 高可用 安装
+############################
 # 高可用，如果部署单Master，该项忽略
 vip: '172.16.163.110'
 nic: 'ens192'
@@ -46,25 +56,33 @@ nic: 'ens192'
 proxy_master_port: '7443'
 # 安装方式二选一,必须关一个
 # 离线安装  nginx HA
-Offline_installation: yes
+Offline_installation: true
 # 在线安装 目前报错不可用
-Online_installation: no
-# 是否离线安装addons yes会导入镜像 no 会从网络上下载镜像
-Offline_mirroring: no
+Online_installation: false
+# 是否离线安装addons true会导入镜像 no 会从网络上下载镜像
+Offline_mirroring: false
 
-#### 安装设置
+############################
+# #### 安全设置
+############################
 # 是否修改sshd,生产环境开启此项测试环境关闭m,一部分安全设置禁止root直接登陆之类的
-replace_sshd: no
-### 网络设置
-# 是否可以连接到 internet，如果可以，则会自动装 ntpdate 等工具，该字段暂时只有控制联网安装一些软件的功能，主要预留为后续离线部署开关
-have_network: yes
-# 两个都要yes才可以使用yum安装工具
-# 是否修改 yum 源或 apt 源为阿里云，注意，会清空原有的源配置
-replace_repo: yes
+replace_sshd: false
 
+############################
+# #### 网络设置
+############################
+# 是否可以连接到 internet，如果可以，则会自动装 ntpdate 等工具，该字段暂时只有控制联网安装一些软件的功能，主要预留为后续离线部署开关
+have_network: true
+# 两个都要true才可以使用yum安装工具
+# 是否修改 yum 源或 apt 源为阿里云，注意，会清空原有的源配置
+replace_repo: true
+
+############################
+# #### 网络插件 安装 [flannel,calico,cilium]
+############################
 # 选择网络插件方案 方案一功能：网络插件选型，metrics_server安装 方案二功能：安装calico，coredns，ingress-nginx，dashboard
-addons_Option_I: yes
-addons_Option_II: no
+addons_Option_I: true
+addons_Option_II: false
 # 目前只支持addons_Option_I 配置
 # Network Plugin
 # 选择你要部署的网络组件 
@@ -93,6 +111,9 @@ coredns:
 metrics_server:
   version: v0.4.1
 
+############################
+# #### 自签证书
+############################
 # 自签证书可信任IP列表，为方便扩展，可添加多个预留IP
 cert_hosts:
   # 包含所有LB、VIP、Master IP和service_cidr的第一个IP
@@ -107,3 +128,18 @@ cert_hosts:
     - 172.16.163.111
     - 172.16.163.112
     - 172.16.163.113
+
+############################
+# harbor
+############################
+# harbor version，完整版本号
+HARBOR_VER: "v2.1.4"
+HARBOR_DOMAIN: "harbor.space.com"
+
+harbor_tls_port: 443
+#harbor安装目录
+harbor_work_dir: '/data'
+#harbor数据目录
+harbor_data: '/data/harbor/data'
+# 已有ca证书，如果设置为'false'，则需要将名为Harbor.pem和Harbor-key.pem的证书放入目录'down'中
+harbor_self_signed_cert: true

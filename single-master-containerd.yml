@@ -49,3 +49,10 @@
   roles:
     - addons
   tags: addons
+
+- name: 7.部署k9s
+  gather_facts: false
+  hosts: k9s
+  roles:
+    - k9s
+  tags: k9s

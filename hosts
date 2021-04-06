@@ -20,6 +20,17 @@
 172.16.163.111 lb_name=lb-master hostname=k8s-master1
 172.16.163.112 lb_name=lb-backup hostname=k8s-master2
 
+[k9s]
+#k9s:k8s 集群管理的工具,哪个IP要就写哪个
+172.16.163.109
+172.16.163.111
+172.16.163.112
+172.16.163.113
+
+#harbor 仓库, docker私人仓库
+[harbor]
+#172.16.163.43 hostname=harbor
+
 [k8s:children]
 master
 node
