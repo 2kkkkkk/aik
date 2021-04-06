@@ -46,7 +46,7 @@ fi
 
 which mycli >/dev/null 2>&1
 if [ `echo $?` -ne 0 ];then
-	pip3 install mycli
+	pip3 install mycli -i https://mirrors.aliyun.com/pypi/simple/
 	if [ `echo $?` -eq 0 ];then
 		ln -s /usr/local/python3/bin/mycli  /usr/local/bin/mycli
 	fi
