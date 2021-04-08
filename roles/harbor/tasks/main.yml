@@ -43,7 +43,7 @@
   shell: "cd {{ harbor_work_dir }} && tar zxf harbor-offline-installer-{{ HARBOR_VER }}.tgz"
 
 - name: 准备cfssl工具
-  unarchive: src={{ software_dir }}/cfssl.tar.gz dest=/usr/bin/ mode=u+x
+  unarchive: src={{ software_dir }}/cfssl.tar.gz dest=/usr/local/bin/ mode=u+x
 
 - name: 准备harbor证书目录
   file: dest={{ harbor_work_dir }}/harbor/{{ item }} state=directory
