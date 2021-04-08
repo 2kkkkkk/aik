@@ -152,8 +152,8 @@ if [ `echo $?` -eq 0 ];then
 	FUNC_ECHO_SUCCESS "当前ansible已安装版本是：`/usr/local/bin/ansible --version|head -n 1`"
 else
 	FUNC_ECHO_INFO "开始安装ansible..."
-	/usr/bin/pip3 install ansible -i https://mirrors.aliyun.com/pypi/simple/
-	/usr/bin/pip3 install netaddr -i https://mirrors.aliyun.com/pypi/simple/
+	pip3 install ansible -i https://mirrors.aliyun.com/pypi/simple/
+	pip3 install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 	yum -y install sshpass
 	ln -s /usr/local/python3/bin/ansible-playbook  /usr/local/bin/ansible-playbook
 	ln -s /usr/local/python3/bin/ansible  /usr/local/bin/ansible
