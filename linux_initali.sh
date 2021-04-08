@@ -224,7 +224,7 @@ fi
 yum -y update 
 FUNC_ECHO_INFO "------------------优化完成--------------------"
 
-rebot=`echo -e "\e[1;42m是重启系统（默认 y） [y/n]: \e[0m"`
+rebot=`echo -e "\e[1;42m是否重启系统（默认 y） [y/n]: \e[0m"`
 read -p "$rebot: " REBOOT
 case ${REBOOT} in
   [yY][eE][sS]|[yY])

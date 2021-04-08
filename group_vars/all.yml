@@ -26,7 +26,7 @@ k9s_install: true
 # #### 容器引擎 安装
 ############################
 # 支持的集群容器引擎: docker, containerd
-container_runtime: containerd
+container_runtime: docker
 # [.]启用容器仓库镜像
 enable_mirror_warehouse: true
 
@@ -93,7 +93,7 @@ network_plugin: calico
 calico:
   version: v3.17.0
   network_mode: ipip
-  network_card: ens192
+  network_card: ens*
 
 flannel:
   version: v0.13.0
