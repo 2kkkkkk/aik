@@ -19,7 +19,7 @@ cluster_domain: 'cluster.local'
 proxy_mode: "ipvs"
 
 ############################
-# #### k9s 安装 [用K9s - Kubernetes CLI管理K8s集群]
+# #### k9s 安装 [K9s - Kubernetes CLI管理K8s集群]
 ############################
 k9s_install: true
 ############################
