@@ -102,9 +102,9 @@ if [ `echo $?` -eq 0 ];then
 	./configure --prefix=/usr/local/python3 --with-ssl 
 	make && make install
 	if [ `echo $?` -eq 0 ];then
-		ln -sf $py_pyth/bin/python3.8 /usr/bin/python3
-		ln -sf $py_pyth/bin/pip3.8 /usr/bin/pip3
-		FUNC_ECHO_SUCCESS "当前python安装版本: `/usr/bin/python3 --version`"
+		ln -sf $py_pyth/bin/python3.8 /usr/local/bin/python3
+		ln -sf $py_pyth/bin/pip3.8 /usr/local/bin/pip3
+		FUNC_ECHO_SUCCESS "当前python安装版本: `/usr/local/bin/python3 --version`"
 	else
 		FUNC_ECHO_ERROR -n "编译安装失败，退出码："
 		exit 2
@@ -139,7 +139,7 @@ if [ `echo $?` -ne 0 ];then
 	fi
 	tar zxf k9s_Linux_x86_64.tar.gz/k9s -C /usr/local/bin
 	chmod +x /usr/local/bin/k9s
-	FUNC_ECHO_SUCCESS " 当前K9S安装版本为： `k9s version|grep 'Version:'`"
+	FUNC_ECHO_SUCCESS " 当前K9S安装版本为： `/usr/local/bin/k9s version|grep 'Version:'`"
 fi
 
 
@@ -149,7 +149,7 @@ function FUNC_ANSIBLE(){
 #安装ansible
 /usr/bin/which ansible >/dev/null 2>&1
 if [ `echo $?` -eq 0 ];then
-	FUNC_ECHO_SUCCESS "当前ansible已安装版本是：`ansible --version|head -n 1`"
+	FUNC_ECHO_SUCCESS "当前ansible已安装版本是：`/usr/local/bin/ansible --version|head -n 1`"
 else
 	FUNC_ECHO_INFO "开始安装ansible..."
 	/usr/bin/pip3 install ansible -i https://mirrors.aliyun.com/pypi/simple/
@@ -157,7 +157,7 @@ else
 	yum -y install sshpass
 	ln -s /usr/local/python3/bin/ansible-playbook  /usr/local/bin/ansible-playbook
 	ln -s /usr/local/python3/bin/ansible  /usr/local/bin/ansible
-	FUNC_ECHO_SUCCESS "当前ansible安装版本是：`ansible --version|head -n 1`"
+	FUNC_ECHO_SUCCESS "当前ansible安装版本是：`/usr/local/bin/ansible --version|head -n 1`"
 fi
 }
 
