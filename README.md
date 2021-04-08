@@ -42,7 +42,8 @@ ln -s /usr/local/python3/bin/ansible-playbook  /usr/bin/ansible-playbook
 ln -s /usr/local/python3/bin/ansible  /usr/bin/ansible
 # 安装netaddr模块
 pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
-
+#或者执行python3安装脚本
+/bin/bash install_py3.sh
 ```
 ### 2、下载所需文件
 
@@ -103,7 +104,7 @@ cert_hosts:
 多Master架构
 ![avatar](https://images.gitee.com/uploads/images/2021/0225/170745_b7ba1da3_8721850.jpeg "multi-master.jpg")
 
-###Containerd容器引擎 待开发
+###Containerd容器引擎 
 
 多Master版：
 ```
