@@ -64,7 +64,7 @@ function FUNC_ECHO_ERROR() {
 #############################################################################################
 # 菜单选择函数
 #############################################################################################
-FUNC_MUNU(){
+function FUNC_MUNU(){
 echo -e "\033[33m*********MENU**********\033[0m"
 echo -e "\033[33m1. ALL INSTALL\033[0m"
 echo -e "\033[33m2. INSTALL Python\033[0m"
@@ -82,7 +82,7 @@ pak_v="Python-3.*"
 # Python3安装函数
 #############################################################################################
 
-FUNC_PY3(){
+function FUNC_PY3(){
 #安装python3
 if [ ! -f $pak_v.tar.xz ];then
 	FUNC_ECHO_INFO "未发现Python安装包，准备在线下载！"
@@ -115,7 +115,7 @@ fi
 }
 
 
-FUNC_MYCLI(){
+function FUNC_MYCLI(){
 which mycli >/dev/null 2>&1
 if [ `echo $?` -ne 0 ];then
 	FUNC_ECHO_INFO "开始安装Mycli！"
@@ -126,7 +126,7 @@ if [ `echo $?` -ne 0 ];then
 fi
 }
 
-FUNC_K9S(){
+function FUNC_K9S(){
 k9s version > /dev/null 2>&1
 if [ `echo $?` -ne 0 ];then
 	if [ ! -f k9s_Linux_x86_64.tar.gz ];then
@@ -145,7 +145,7 @@ fi
 
 }
 
-FUNC_ANSIBLE(){
+function FUNC_ANSIBLE(){
 #安装ansible
 /usr/bin/which ansible >/dev/null 2>&1
 if [ `echo $?` -eq 0 ];then
