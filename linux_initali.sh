@@ -62,7 +62,7 @@ function FUNC_ECHO_ERROR() {
   echo $(FUNC_COLOR_TEXT "${LINE}" "31")
 }
 
-FUNC_MUNU(){
+function FUNC_MUNU(){
 echo -e "\033[33m*********MENU**********\033[0m"
 echo -e "\033[33m1. 系统初始化\033[0m"
 echo -e "\033[33m2. 卸载内核\033[0m"
