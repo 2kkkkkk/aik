@@ -62,7 +62,7 @@ function FUNC_ECHO_ERROR() {
   echo $(FUNC_COLOR_TEXT "${LINE}" "31")
 }
 
-FUNC_MUNU(){
+function FUNC_MUNU(){
 echo -e "\033[33m*********MENU**********\033[0m"
 echo -e "\033[33m1. 系统初始化\033[0m"
 echo -e "\033[33m2. 卸载内核\033[0m"
@@ -224,7 +224,7 @@ fi
 yum -y update 
 FUNC_ECHO_INFO "------------------优化完成--------------------"
 
-rebot=`echo -e "\e[1;42m是重启系统（默认 y） [y/n]: \e[0m"`
+rebot=`echo -e "\e[1;42m是否重启系统（默认 y） [y/n]: \e[0m"`
 read -p "$rebot: " REBOOT
 case ${REBOOT} in
   [yY][eE][sS]|[yY])

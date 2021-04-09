@@ -8,7 +8,6 @@
 [node]
 172.16.163.114 node_name=k8s-node1 hostname=k8s-node1
 172.16.163.115 node_name=k8s-node2 hostname=k8s-node2
-#172.16.163.111 node_name=k8s-node3
 
 [etcd]
 172.16.163.111 etcd_name=etcd-1 hostname=k8s-master1
@@ -22,7 +21,7 @@
 
 [k9s]
 #k9s:k8s 集群管理的工具,哪个IP要就写哪个
-172.16.163.109
+172.16.163.100 hostname=k8s-client100
 172.16.163.111
 172.16.163.112
 172.16.163.113
