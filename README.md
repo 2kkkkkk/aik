@@ -4,46 +4,12 @@
 ```
 ### 1、找一台服务器安装Ansible
 ```
-# 需要安装python3 用pip3安装ansible
-#python3安装
-1.依赖包安装
-yum -y  install gcc-c++
-yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel
-2.下载包：
-#下载路径(里面有不同的版本)https://www.python.org/ftp/python/3.8.8/
-#下载命令
-wget https://www.python.org/ftp/python/3.8.8/Python-3.8.8.tar.xz
-3.解压：
-tar -zxvf Python-3.8.8.tar.xz
-4.安装：
-cd Python-3.8.8
-#指定编译目录
-mkdir /usr/local/python3
-./configure --prefix=/usr/local/python3 --with-ssl
-#编译安装
-make && make install
-5.建立软连接
-ln -s /usr/local/python3/bin/python3.8 /usr/bin/python3
-ln -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3  没有pip直接就pip
-6.测试一下python3是否可以用
-python3
-pip3
-安装ansible
-pip install ansible -i https://mirrors.aliyun.com/pypi/simple/
-#ansible需要sshpass
-yum -y install sshpass
-#ansible配置文件
-https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg
-#ansible需要sshpass
-yum -y install sshpass
-#软链接ansible-playbook
-ln -s /usr/local/python3/bin/ansible-playbook  /usr/bin/ansible-playbook
-#软链接
-ln -s /usr/local/python3/bin/ansible  /usr/bin/ansible
-# 安装netaddr模块
-pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
-#或者执行python3安装脚本
+#执行python3和ansible安装脚本
 /bin/bash install_py3.sh
+#执行内核更新脚本 （可选 内核选择ml）
+/bin/bash kernel_update.sh
+#执行系统初始化脚本 （可选 需要更改DNS信息）
+/bin/bash linux_initali.sh
 ```
 ### 2、下载所需文件
 
@@ -68,17 +34,43 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 修改hosts文件，根据规划修改对应IP和名称。
 
 ```
-# vi hosts
+# vim hosts
 [master]
+# 如果部署单Master，只保留一个Master节点
+# 默认Naster节点也部署Node组件
 172.16.163.111 node_name=k8s-master1 hostname=k8s-master1
+172.16.163.112 node_name=k8s-master2 hostname=k8s-master2
+172.16.163.113 node_name=k8s-master3 hostname=k8s-master3
+
 [node]
 172.16.163.114 node_name=k8s-node1 hostname=k8s-node1
+172.16.163.115 node_name=k8s-node2 hostname=k8s-node2
+
 [etcd]
 172.16.163.111 etcd_name=etcd-1 hostname=k8s-master1
+172.16.163.112 etcd_name=etcd-2 hostname=k8s-master2
+172.16.163.113 etcd_name=etcd-3 hostname=k8s-master3
+
 [lb]
 # 如果部署单Master，该项忽略
 172.16.163.111 lb_name=lb-master hostname=k8s-master1
-#用于添加节点
+172.16.163.112 lb_name=lb-backup hostname=k8s-master2
+
+[k9s]
+#k9s:k8s 集群管理的工具,哪个IP要就写哪个
+172.16.163.100 hostname=k8s-client100
+172.16.163.111
+172.16.163.112
+172.16.163.113
+
+#harbor 仓库, docker私人仓库
+[harbor]
+#172.16.163.43 hostname=harbor
+
+[k8s:children]
+master
+node
+
 [newnode]
 #172.16.163.106 node_name=k8s-node3
 
@@ -86,12 +78,27 @@ pip install netaddr -i https://mirrors.aliyun.com/pypi/simple/
 ansible -i hosts all  -m shell -a "date" -uroot -k
 ...
 ```
-修改group_vars/all.yml文件，修改软件包目录和证书可信任IP。
-其他参数都有备注，注意ip是对的 网络保持一致
+修改group_vars/all.yml文件，修改软件包目录和容器引擎,网络插件方案还有证书可信任IP。
+其他参数都有备注。
 ```
 # vim group_vars/all.yml
+#K9s - Kubernetes CLI管理K8s集群,不许要安装设置为false
+k9s_install: true
+
+# 支持的集群容器引擎: docker, containerd
+container_runtime: docker
+
+# 选择网络插件方案 
+addons_Option_I: true
+addons_Option_II: false
+
+# 网络插件选择 calico flannel cilium
+network_plugin: calico
+
+#安装包目录
 software_dir: '/root/binary_pkg'
 ...
+#证书可信任ip
 cert_hosts:
   k8s:
   etcd:
@@ -125,7 +132,10 @@ cert_hosts:
 ```
 # ansible-playbook -i hosts single-master-docker.yml -uroot -k
 ```
-
+###Harbor仓库安装
+```
+# ansible-playbook -i hosts harbor.yml -uroot -k
+```
 ## 5、部署控制
 如果安装某个阶段失败，可针对性测试.
 
