@@ -7,8 +7,8 @@
       "kubernetes",
       "kubernetes.default",
       "kubernetes.default.svc",
-      "kubernetes.default.svc.cluster",
-      "kubernetes.default.svc.cluster.local",
+      "kubernetes.default.svc.{{ cluster }}",
+      "kubernetes.default.svc.{{ cluster_domain }}",
       {% for ip in cert_hosts.k8s %}
         {% if number == loop.index %}
           "{{ ip }}"

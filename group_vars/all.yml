@@ -14,6 +14,7 @@ service_cidr: '10.1.0.0/24' #集群Service网段
 cluster_dns: '10.1.0.2'   # 与roles/addons/files/coredns.yaml中IP一致，并且是service_cidr中的IP
 pod_cidr: '10.244.0.0/16' # 与roles/addons/files/calico.yaml中网段一致，集群Pod网段
 service_nodeport_range: '30000-32767'
+cluster: 'cluster'
 cluster_domain: 'cluster.local'
 # kube-proxy的服务代理模式: 'iptables' or 'ipvs'
 proxy_mode: "ipvs"
