@@ -93,7 +93,7 @@ network_plugin: calico
 calico:
   version: v3.17.0
   network_mode: ipip
-  network_card: ens*
+  network_card: ens.*
 
 flannel:
   version: v0.13.0
