@@ -8,7 +8,7 @@
 
 - name: 1.部署Docker
   gather_facts: false
-  hosts: k8s
+  hosts: harbor
   roles:
     - docker
   tags: docker
