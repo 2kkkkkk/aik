@@ -1,10 +1,22 @@
 ---
-- name: 1.安装harbor
+- name: 0.系统初始化
   gather_facts: false
-  hosts: 
-    - harbor
+  hosts: harbor
+  roles:
+    - common
+  tags: common
+
+- name: 1.部署Docker
+  gather_facts: false
+  hosts: harbor
   roles:
     - docker
+  tags: docker
+
+- name: 2.安装harbor
+  gather_facts: false
+  hosts: harbor
+  roles:
     - harbor
   tags: harbor
 

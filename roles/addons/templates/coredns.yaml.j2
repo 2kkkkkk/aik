@@ -67,7 +67,7 @@ data:
             lameduck 5s
         }
         ready
-        kubernetes cluster.local in-addr.arpa ip6.arpa {
+        kubernetes {{ cluster_domain }} in-addr.arpa ip6.arpa {
             pods insecure
             fallthrough in-addr.arpa ip6.arpa
             ttl 30
@@ -119,7 +119,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: coredns
-        image: registry.aliyuncs.com/k8sxio/coredns:{{coredns.version}}
+        image: registry.cn-shenzhen.aliyuncs.com/2kk/coredns:{{coredns.version}}
         imagePullPolicy: IfNotPresent
         resources:
           limits:
