@@ -1,6 +1,7 @@
 # Kubernetes 企业级高可用集群
 ``` 
 支持的kubernetes版本：v1.19 v1.20
+测试过的版本：v1.19.8 v1.20.6
 ```
 ### 1、找一台服务器安装Ansible
 ```
@@ -16,15 +17,15 @@
 下载Ansible部署文件：
 
 ```
-# git clone https://gitee.com/Zheng--Kai/aik.git
+# git clone https://github.com/2kkkkkk/aik.git
 # cd aik
 ```
 
 下载准备好软件包并解压/root目录：
 
-链接: 链接：https://pan.baidu.com/s/1kkPAR0xFztB2yepe4t7yRg
+链接：https://pan.baidu.com/s/1zPoC_TV1FlSX6zt3gsWTCQ
 
-提取码: 2kkk
+提取码：2kkk
 
 ```
 # tar zxf binary_pkg.tar.gz
