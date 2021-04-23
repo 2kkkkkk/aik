@@ -15,6 +15,17 @@
 172.16.163.112 etcd_name=etcd-2 hostname=k8s-master2
 172.16.163.113 etcd_name=etcd-3 hostname=k8s-master3
 
+[k9s]
+#k9s:k8s 集群管理的工具,哪个IP要就写哪个
+172.16.163.100 hostname=k8s-client100
+172.16.163.111
+172.16.163.112
+172.16.163.113
+
+#harbor 仓库, docker私人仓库
+[harbor]
+#172.16.163.43 hostname=harbor
+
 [lb]
 # 如果部署单Master，该项忽略
 172.16.163.111 lb_name=lb-master hostname=k8s-master1
