@@ -63,6 +63,12 @@
     - kube-apiserver
     - kube-controller-manager
     - kube-scheduler
+
+- name: 创建kubectl配置文件目录
+  file: dest=/root/.kube state=directory
+- name: 分发k8s配置文件
+  template: src=config.j2 dest=/root/.kube/config
+
 # 轮询等待kube-apiserver启动完成
 - name: 轮询等待kube-apiserver启动
   shell: "systemctl status kube-apiserver.service|grep Active"
