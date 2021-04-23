@@ -1,4 +1,12 @@
 ---
+- name: 获取是否已经安装docker
+  shell: 'systemctl status docker|grep Active || echo "NoFound"'
+  register: docker_svc
+
+- name: 获取是否已经安装containerd
+  shell: 'systemctl status containerd|grep Active || echo "NoFound"'
+  register: containerd_svc
+
 - name: 创建临时目录
   file: dest={{ tmp_dir }} state=directory
 
@@ -8,21 +16,36 @@
     - "{{ software_dir }}/docker-*.tgz"
 
 - name: 移动docker二进制文件
-  shell: cp -rf {{ tmp_dir }}/docker/* /usr/bin
+  shell: cp -rf {{ tmp_dir }}/docker/* /usr/local/bin
 
 - name: 分发service文件
-  copy: src=docker.service dest=/usr/lib/systemd/system/
+  template: src=docker.service.j2 dest=/etc/systemd/system/docker.service
 
 - name: 创建目录
   file: dest=/etc/docker state=directory
 
 - name: 配置docker
-  copy: src=daemon.json dest=/etc/docker/daemon.json
+  template: src=daemon.json.j2 dest=/etc/docker/daemon.json
 
 - name: 启动docker
   systemd: name=docker state=restarted enabled=yes daemon_reload=yes
 
+- name: 轮询等待docker服务运行
+  shell: "systemctl status docker.service|grep Active"
+  register: docker_status
+  until: '"running" in docker_status.stdout'
+  retries: 8
+  delay: 2
+  tags: upgrade_docker
+
+- name: docker命令自动补全
+  copy: src=docker dest=/etc/bash_completion.d/docker mode=0644
+
 - name: 查看状态
   shell: docker info
-  register: docker 
+  register: docker
 - debug: var=docker.stdout_lines
+
+## 可选 ------安装docker查询镜像 tag的小工具----
+- name: 下载 docker-tag
+  copy: src=docker-tag dest=/usr/local/bin/docker-tag mode=0755

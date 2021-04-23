@@ -1,41 +1,64 @@
-- name: "添加Docker软件源"
-  yum_repository:
-    file: docker-ce
-    name: "docker-ce-stable"
-    description: "Docker CE Stable - $basearch"
-    baseurl: "https://mirrors.aliyun.com/docker-ce/linux/centos/7/$basearch/stable"
-    gpgkey: "https://mirrors.aliyun.com/docker-ce/linux/centos/gpg"
-    gpgcheck: yes
-    enabled: yes
-  tags: docker_repo
+- name: 获取是否已经安装docker
+  shell: 'systemctl status docker|grep Active || echo "NOT FOUND"'
+  register: docker_status
 
-- name: "安装containerd"
-  yum:
-    update_cache: yes
-    enablerepo: docker-ce-stable
-    name: 'containerd.io{% if containerd_version is defined and containerd_version != ""  %}-{{ containerd_version }}{% endif %}'
-    state: installed
-  tags: install_containerd
+- name: 停止docker
+  shell: 'systemctl stop docker'
+  when: '"running" in docker_status.stdout'
 
-- name: "创建containerd配置目录"
-  file:
-    path: "{{ item.path }}"
-    owner: root
-    group: root
-    mode: 0755
-    state: directory
+- name: 创建临时目录
+  file: dest={{ tmp_dir }}/containerd state=directory
+
+- name: 准备containerd工作目录
+  file: dest={{ item }} state=directory
   with_items:
-    - {path: "/etc/containerd"}
-    - {path: "{{ containerd_root }}"}
-  tags: containerd_config
+    - "/etc/containerd"
+    - "{{ containerd_work_dir }}/bin"
 
-- name: "生成containerd配置文件"
-  template:
-    src: "config.toml.j2"
-    dest: "/etc/containerd/config.toml"
-    owner: root
-    group: root
-    mode: 0644
-  tags: containerd_config
-  notify:
-    - restart containerd
+- name: 加载内核模块 overlay
+  modprobe: name=overlay state=present
+
+- name: 分发并解压containerd二进制包
+  unarchive: src={{ item }} dest={{ tmp_dir }}/containerd
+  with_fileglob:
+    - "{{ software_dir }}/cri-containerd-cni-*.tar.gz"
+  tags: upgrade
+
+- name: 移动containerd二进制文件
+  shell: cp -rf {{ tmp_dir }}/containerd/usr/local/bin/{containerd,containerd-shim,containerd-shim-runc-v1,containerd-shim-runc-v2} {{ containerd_work_dir }}/bin && \
+    cp -rf {{ tmp_dir }}/containerd/usr/local/sbin/runc /usr/local/sbin && \
+    cp -rf {{ tmp_dir }}/containerd/usr/local/bin/{ctr,crictl} /usr/local/bin
+
+- name: 创建 containerd 配置文件
+  template: src=config.toml.j2 dest=/etc/containerd/config.toml
+  tags: upgrade
+
+- name: 创建systemd unit文件
+  template: src=containerd.service.j2 dest=/etc/systemd/system/containerd.service
+  tags: upgrade
+
+- name: 创建 crictl 配置
+  template: src=crictl.yaml.j2 dest=/etc/crictl.yaml
+
+- name: 开机启用 containerd 服务
+  shell: systemctl enable containerd
+  ignore_errors: true
+
+- name: 开启 containerd 服务
+  shell: systemctl daemon-reload && systemctl restart containerd
+  tags: upgrade
+
+- name: 轮询等待containerd服务运行
+  shell: "systemctl status containerd.service|grep Active"
+  register: containerd_status
+  until: '"running" in containerd_status.stdout'
+  retries: 8
+  delay: 2
+  tags: upgrade
+
+- name: 添加 crictl 命令自动补全
+  lineinfile:
+    dest: ~/.bashrc
+    state: present
+    regexp: 'crictl completion'
+    line: 'source <(crictl completion)'

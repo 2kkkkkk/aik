@@ -6,11 +6,11 @@
     msg: "hostname not specified"
   when:
     - hostname is not defined
+
 - name: "修改主机名"
   hostname:
     name: "{{ hostname|quote }}"
   tags: hostname
-
 
 - name: "设置主机名ip高亮显示,历史记录格式修改"
   copy:
@@ -197,5 +197,29 @@
     - {line: 'net-tools'}
     - {line: 'nfs-utils'}
     - {line: 'yum-utils'}
+    - {line: 'conntrack-tools'}
+    - {line: 'ipset'}
+    - {line: 'ipvsadm'}
+    - {line: 'libseccomp'}
+    - {line: 'psmisc'}
+    - {line: 'socat'}
   tags: install_app
   when: have_network and replace_repo
+
+# 优化设置 journal 日志相关，避免日志重复搜集，浪费系统资源
+- name: 禁止rsyslog获取journald日志1
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    state: present
+    regexp: 'ModLoad imjournal'
+    line: '#$ModLoad imjournal # provides access to the systemd journal'
+
+- name: 禁止rsyslog获取journald日志2
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    state: present
+    regexp: 'IMJournalStateFile'
+    line: '#$IMJournalStateFile imjournal.state'
+
+- name: 重启rsyslog服务
+  service: name=rsyslog state=restarted

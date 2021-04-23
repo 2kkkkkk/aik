@@ -63,6 +63,32 @@
     - kube-apiserver
     - kube-controller-manager
     - kube-scheduler
+# 轮询等待kube-apiserver启动完成
+- name: 轮询等待kube-apiserver启动
+  shell: "systemctl status kube-apiserver.service|grep Active"
+  register: api_status
+  until: '"running" in api_status.stdout'
+  retries: 10
+  delay: 3
+  tags: upgrade_k8s, restart_master
+
+# 轮询等待kube-controller-manager启动完成
+- name: 轮询等待kube-controller-manager启动
+  shell: "systemctl status kube-controller-manager.service|grep Active"
+  register: cm_status
+  until: '"running" in cm_status.stdout'
+  retries: 8
+  delay: 3
+  tags: upgrade_k8s, restart_master
+
+# 轮询等待kube-scheduler启动完成
+- name: 轮询等待kube-scheduler启动
+  shell: "systemctl status kube-scheduler.service|grep Active"
+  register: sch_status
+  until: '"running" in sch_status.stdout'
+  retries: 8
+  delay: 3
+  tags: upgrade_k8s, restart_master
 
 - name: 查看集群状态
   shell: sleep 3 && kubectl get cs
@@ -87,4 +113,16 @@
   run_once: true
   shell: sleep 3 && kubectl apply -f {{ tmp_dir }}/apiserver-to-kubelet-rbac.yaml && \
          kubectl apply -f {{ tmp_dir }}/kubelet-bootstrap-rbac.yaml
+
+- name: 自动审批Kubelet证书
+  ignore_errors: yes
+  delegate_to: "{{ groups['master'][0] }}"
+  run_once: true
+  shell: |
+    #自动批准首次申请证书的 CSR 请求
+    kubectl create clusterrolebinding node-client-auto-approve-csr --clusterrole=system:certificates.k8s.io:certificatesigningrequests:nodeclient --user=kubelet-bootstrap
+    # 自动批准kubelet客户端证书续签
+    kubectl create clusterrolebinding node-client-auto-renew-crt --clusterrole=system:certificates.k8s.io:certificatesigningrequests:selfnodeclient --group=system:nodes
+    # 自动批准kubelet服务端证书续签
+    kubectl create clusterrolebinding node-server-auto-renew-crt --clusterrole=system:certificates.k8s.io:certificatesigningrequests:selfnodeserver --group=system:nodes
 

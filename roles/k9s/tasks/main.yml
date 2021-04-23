@@ -1,0 +1,15 @@
+---
+- name: 创建临时目录
+  file: dest={{ tmp_dir }} state=directory
+  when: k9s_install
+
+- name: 分发并解压k9s二进制包
+  unarchive: src={{ item }} dest={{ tmp_dir }}
+  with_fileglob:
+    - "{{ software_dir }}/k9s_Linux_x86_64.tar.gz"
+  when: k9s_install
+
+- name: 移动k9s二进制文件
+  shell: cp -f {{ tmp_dir }}/k9s /usr/local/bin
+  when: k9s_install
+

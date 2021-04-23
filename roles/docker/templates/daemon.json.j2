@@ -1,0 +1,21 @@
+{
+  "data-root": "{{ docker_storage_dir }}",
+  "exec-opts": ["native.cgroupdriver=cgroupfs"],
+{% if enable_mirror_warehouse  %}
+  "registry-mirrors": [
+    "https://nui7xy7i.mirror.aliyuncs.com",
+    "https://docker.mirrors.ustc.edu.cn",
+    "http://hub-mirror.c.163.com"
+  ],
+{% endif %}
+  "insecure-registries": {{ mirror_warehouse }},
+  "max-concurrent-downloads": 10,
+  "live-restore": true,
+  "log-driver": "json-file",
+  "log-level": "warn",
+  "log-opts": {
+    "max-size": "50m",
+    "max-file": "1"
+},
+  "storage-driver": "overlay2"
+}

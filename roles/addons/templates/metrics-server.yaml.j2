@@ -108,6 +108,7 @@ spec:
       labels:
         app: metrics-server
     spec:
+      #hostNetwork: true
       serviceAccountName: metrics-server
       volumes:
       # mount in tmp so we can safely use from-scratch images and/or read-only containers
@@ -116,7 +117,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
       - name: metrics-server
-        image: registry.aliyuncs.com/k8sxio/metrics-server:{{metrics_server.version}}
+        image: registry.cn-shenzhen.aliyuncs.com/2kk/metrics-server:{{metrics_server.version}}
         imagePullPolicy: IfNotPresent
         args:
           - --cert-dir=/tmp
