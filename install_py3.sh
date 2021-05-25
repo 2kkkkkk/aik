@@ -129,15 +129,16 @@ fi
 function FUNC_K9S(){
 k9s version > /dev/null 2>&1
 if [ `echo $?` -ne 0 ];then
-	if [ ! -f k9s_Linux_x86_64.tar.gz ];then
+	if [ ! -f k9s_v0.24.10_Linux_x86_64.tar.gz ];then
 		FUNC_ECHO_INFO "准备下载K9S..."
-		wget https://github.com.cnpmjs.org/derailed/k9s/releases/download/v0.24.6/k9s_Linux_x86_64.tar.gz > /dev/null 2>&1
+		#wget https://github.com.cnpmjs.org/derailed/k9s/releases/download/v0.24.6/k9s_Linux_x86_64.tar.gz > /dev/null 2>&1
+		 wget https://github.com.cnpmjs.org/derailed/k9s/releases/download/v0.24.10/k9s_v0.24.10_Linux_x86_64.tar.gz > /dev/null 2>&1
 		if [ `echo $?` -ne 0 ];then
 			FUNC_ECHO_ERROR "下载失败，将退出"
 			break
 		fi
 	fi
-	tar zxf k9s_Linux_x86_64.tar.gz k9s
+	tar zxf k9s_v0.24.10_Linux_x86_64.tar.gz k9s
 	mv ./k9s /usr/local/bin/k9s
 	chmod +x /usr/local/bin/k9s
 	FUNC_ECHO_SUCCESS " 当前K9S安装版本为： `/usr/local/bin/k9s version|grep 'Version:'`"
